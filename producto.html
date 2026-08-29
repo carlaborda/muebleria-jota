@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Mueblería Hermanos Jota — Producto</title>
+  <link rel="stylesheet" href="itba.css">
+</head>
+<body>
+  <header>
+    <nav aria-label="Menú principal", class="Navegacion">
+      <ul>
+        <li><a href="/inicio">Inicio</a></li>
+        <li><a href="/productos">Productos</a></li>
+        <li><a href="/contacto">Contacto</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main>
+    <section class="detalle-producto">
+    <!-- Contenedor para la imagen grande -->
+    <div class="producto-galeria">
+      <img id="producto-imagen" src="" alt="">
+    </div>
+
+    <!-- Contenedor para la información y compra -->
+    <div class="producto-info">
+      <h1 id="producto-titulo">Cargando producto...</h1>
+      <p id="producto-precio" class="precio"></p>
+      <p id="producto-descripcion"></p>
+
+      <h3>Detalles de fabricación:</h3>
+      <ul id="producto-especificaciones">
+        <!-- Los ítems <li> se insertarán dinámicamente -->
+      </ul>
+
+      <div class="acciones-compra">
+        <label for="cantidad">Cantidad:</label>
+        <input type="number" id="cantidad" value="1" min="1">
+        <button id="btn-agregar-carrito">Añadir al Carrito</button>
+      </div>
+    </div>
+  </section> 
+  </main>
+
+  <footer>
+    <div class="footer-info-contacto">
+      <h3> Hermanos Jota — Casa Taller</h3>
+      <address>
+        Av. San Juan 2847<br>
+        C1232AAB — Barrio de San Cristóbal<br>
+        Ciudad Autónoma de Buenos Aires<br>
+        Argentina
+      </address>
+
+      <p> 
+        <strong>Horarios:</strong><br> 
+        Lunes a Viernes: 10:00 - 19:00 <br> 
+        Sábados: 10:00 - 14:00
+      </p>
+    </div>
+    <div class="footer-contacto-digital"> 
+      <p> 
+        web	www.hermanosjota.com.ar<br>
+        Email general	info@hermanosjota.com.ar<br>
+        Ventas	ventas@hermanosjota.com.ar<br>
+        Instagram	@hermanosjota_ba<br>
+        WhatsApp	+54 11 4567-8900 
+      </p> 
+    </div>
+    <div class="footer-copyright">
+      <p>
+        &copy; <strong>Hermanos Jota.</strong>  Todos los derechos reservados.<br> 
+        Este manual es propiedad de Hermanos Jota Muebles.
+      </p>
+    </div>
+  </footer>
+</body>
+</html>
