@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Contactate con Mueblería Hermanos Jota para consultas, pedidos a medida y asesoramiento en muebles de madera."
+    />
+    <title>Contacto | Mueblería Hermanos Jota</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="itba.css" />
+    <link rel="stylesheet" href="contacto.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a href="itba.html" class="brand" aria-label="Ir a inicio">
+          <span class="brand-mark" aria-hidden="true">
+            <img src="logo.svg" alt="Hermanos Jota" />
+          </span>
+          <span class="brand-text">
+            <strong>Hermanos</strong>
+            Jota
+          </span>
+        </a>
+
+        <nav class="main-nav" aria-label="Menú principal">
+          <ul>
+            <li><a href="itba.html">Inicio</a></li>
+            <li><a href="productos.html">Productos</a></li>
+            <li><a href="#servicios">Servicios</a></li>
+            <li><a href="#sobre-nosotros">Nosotros</a></li>
+            <li><a href="contacto.html" aria-current="page">Contacto</a></li>
+          </ul>
+        </nav>
+
+        <button class="cart-button" type="button" aria-label="Ver carrito">
+          <span class="cart-label">Carrito</span>
+          <span class="cart-count" id="cart-count">0</span>
+        </button>
+      </div>
+    </header>
+
+    <main class="page-main">
+      <section class="contact-hero" aria-labelledby="contact-title">
+        <div class="container hero-grid">
+          <div class="hero-copy">
+            <p class="eyebrow">Casa Taller</p>
+            <h1 id="contact-title">Hablemos de tu próximo proyecto.</h1>
+            <p class="lead">
+              En Hermanos Jota acompañamos proyectos residenciales, comerciales y
+              de arquitectura con muebles a medida, restauración y asesoramiento
+              artesanal en cada detalle.
+            </p>
+          </div>
+
+          <aside class="hero-details" aria-label="Información de contacto">
+            <div class="info-card">
+              <h2>Hermanos Jota</h2>
+              <ul class="contact-list">
+                <li>
+                  <span class="label">Ubicación</span>
+                  <p>
+                    Av. San Juan 2847<br />
+                    C1232AAB — Barrio de San Cristóbal<br />
+                    Ciudad Autónoma de Buenos Aires
+                  </p>
+                </li>
+                <li>
+                  <span class="label">Horarios</span>
+                  <p>
+                    Lunes a Viernes: 10:00 - 19:00<br />
+                    Sábados: 10:00 - 14:00
+                  </p>
+                </li>
+              </ul>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="contact-section" aria-labelledby="form-title">
+        <div class="container contact-grid">
+          <article class="contact-panel">
+            <div class="section-heading compact">
+              <p class="eyebrow">Consulta</p>
+              <h2 id="form-title">Escribinos</h2>
+            </div>
+
+            <form id="contact-form" novalidate>
+              <div class="form-group">
+                <label for="nombre">Nombre</label>
+                <input id="nombre" name="nombre" type="text" placeholder="Tu nombre" />
+              </div>
+
+              <div class="form-group">
+                <label for="email">Email</label>
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  placeholder="tuemail@ejemplo.com"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="mensaje">Mensaje</label>
+                <textarea
+                  id="mensaje"
+                  name="mensaje"
+                  rows="6"
+                  placeholder="Contanos qué necesitas..."
+                ></textarea>
+              </div>
+
+              <button class="button-primary" type="submit">Enviar consulta</button>
+            </form>
+
+            <div id="form-message" class="form-message" aria-live="polite"></div>
+          </article>
+
+          <aside class="info-panel" aria-labelledby="info-title">
+            <div class="section-heading compact">
+              <p class="eyebrow">Contacto digital</p>
+              <h2 id="info-title">Hermanos Jota</h2>
+            </div>
+
+            <ul class="service-list">
+              <li>
+                <strong>Sitio web</strong>
+                <span>www.hermanosjota.com.ar</span>
+              </li>
+              <li>
+                <strong>Email general</strong>
+                <span>info@hermanosjota.com.ar</span>
+              </li>
+              <li>
+                <strong>Ventas</strong>
+                <span>ventas@hermanosjota.com.ar</span>
+              </li>
+              <li>
+                <strong>Instagram</strong>
+                <span>@hermanosjota_ba</span>
+              </li>
+              <li>
+                <strong>WhatsApp</strong>
+                <span>+54 11 4567-8900</span>
+              </li>
+            </ul>
+          </aside>
+        </div>
+      </section>
+
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <div>
+          <p class="footer-brand">Hermanos Jota</p>
+          <p>Casa Taller · madera, diseño y atención personalizada.</p>
+        </div>
+
+        <address>
+          Av. San Juan 2847, CABA<br />
+          Email general: info@hermanosjota.com.ar<br />
+          Ventas: ventas@hermanosjota.com.ar<br />
+          WhatsApp: +54 11 4567-8900
+        </address>
+      </div>
+    </footer>
+
+    <script src="contacto.js"></script>
+  </body>
+</html>
