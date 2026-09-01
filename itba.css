@@ -1,32 +1,138 @@
+:root {
+  --bg: #f5efe7;
+  --paper: #f9f3ed;
+  --paper-strong: #f1e6d8;
+  --siena: #A0522D;
+  --siena-deep: #7b3d22;
+  --sage: #87A96B;
+  --ivory: #F5E6D3;
+  --gold: #D4A437;
+  --rose: #C47A6D;
+  --wood: #A0522D;
+  --wood-deep: #3a251f;
+  --forest: #27362d;
+  --forest-soft: #4d5f55;
+  --gold-soft: #e9d7a7;
+  --text: #1f1a18;
+  --muted: #5d4d46;
+  --line: rgba(58, 41, 33, 0.12);
+  --shadow: 0 18px 40px rgba(42, 30, 22, 0.12);
+  --radius: 18px;
+  --radius-lg: 28px;
+}
+
 * {
-  margin: 2;
+  margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-/* barra de navegacion en comun para todos los html */
-.navegacion ul{
-  background-color: #F5E6D3;
-  display: flex;
-  flex-direction: row;
-  justify-content: center; 
-  gap: 1.5rem;         
-  list-style: none;    
-  margin: 0;
-  padding: 0;
+a {
+  color: inherit;
+  text-decoration: none;
 }
 
-.navegacion a {
-  color: #A0522D;
-  text-decoration: none; /* Opcional: quita el subrayado azul/morado por defecto */
-  font-family: 'Playfair Display', Georgia, serif;
-  text-transform: uppercase;   
+ul,
+ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
+
+body {
+  margin: 0;
+  font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+  font-weight: 400;
+  font-size: 12px;
+  background: linear-gradient(180deg, var(--ivory) 0%, #f3eadf 100%);
+  color: var(--text);
+  line-height: 1.6;
+}
+
+/* barra de navegacion en comun para todos los html */
+.main-nav {
+  display: none;
+}
+
+.main-nav ul {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+}
+
+.main-nav a {
+  position: relative;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--muted);
+  transition: color 0.2s ease;
+}
+
+.main-nav a::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -0.35rem;
+  width: 100%;
+  height: 2px;
+  border-radius: 999px;
+  background: var(--sage);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.2s ease;
+}
+
+.main-nav a:hover,
+.main-nav a[aria-current='page'] {
+  color: var(--wood-deep);
+}
+
+.main-nav a:hover::after,
+.main-nav a[aria-current='page']::after {
+  transform: scaleX(1);
+}
+
+.container {
+  width: min(1120px, calc(100% - 1.5rem));
+  margin: 0 auto;
+}
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: rgba(249, 243, 237, 0.96);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(135, 169, 107, 0.18);
+  box-shadow: 0 10px 25px rgba(65, 44, 34, 0.03);
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  min-height: 76px;
+}
+
 
 /* CSS para producto.html */
 #footer-column {
   display: flex;
-  flex-direction: row;        
+  flex-direction: column;        
   gap: 2rem;                  
 }
 
+/* condicion para pantallas con ese cierto minimo de ancho*/
+@media (min-width: 768px) {
+
+  .main-nav {
+    display: block;
+  }
+
+  #footer-column {
+    flex-direction: row;
+    gap: 2rem;
+  }
+}
