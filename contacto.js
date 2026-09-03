@@ -124,7 +124,7 @@ const showFormMessage = (message, type) => {
 };
 
 if (contactForm) {
-  contactForm.addEventListener('submit', (event) => {
+  contactForm.addEventListener('submit', async (event) => {
     event.preventDefault();
 
     const nombre = document.querySelector('#nombre').value.trim();
@@ -143,8 +143,31 @@ if (contactForm) {
       return;
     }
 
-    showFormMessage(`Gracias ${nombre}. Tu consulta fue enviada con éxito.`, 'success');
-    contactForm.reset();
+    const submitButton = contactForm.querySelector('button[type="submit"]');
+    submitButton.disabled = true;
+    showFormMessage('Enviando tu consulta...', 'success');
+
+    try {
+      const response = await fetch(contactForm.action, {
+        method: 'POST',
+        body: new FormData(contactForm),
+        headers: {
+          Accept: 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Formspree rechazó el envío');
+      }
+
+      showFormMessage(`Gracias ${nombre}. Tu consulta fue enviada con éxito.`, 'success');
+      contactForm.reset();
+    } catch (error) {
+      showFormMessage('No pudimos enviar tu consulta. Intentá nuevamente.', 'error');
+      console.error('Error al enviar la consulta:', error);
+    } finally {
+      submitButton.disabled = false;
+    }
   });
 }
 
