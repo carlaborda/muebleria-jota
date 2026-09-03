@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Hermanos Jota — Muebles con historia</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="cabecera">
+    <div class="cabecera__contenedor">
+      <a href="index.html" class="logo">
+        <img src="images/logo.svg" alt="" class="logo__imagen">
+        <span class="logo__texto">Hermanos<br>Jota</span>
+      </a>
+
+      <nav class="nav-principal" aria-label="Menú principal">
+        <ul class="nav-principal__lista">
+          <li><a href="index.html" aria-current="page">Inicio</a></li>
+          <li><a href="productos.html">Productos</a></li>
+          <li><a href="contacto.html">Contacto</a></li>
+        </ul>
+      </nav>
+
+      <a href="#" class="carrito" aria-label="Ver carrito de compras">
+        <span class="carrito__icono" aria-hidden="true">🛒</span>
+        <span>Carrito</span>
+        <span id="carrito-contador" class="carrito__contador">0</span>
+      </a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero__contenido">
+        <h1>El redescubrimiento de un arte olvidado</h1>
+        <p>Cada pieza cuenta la historia de manos expertas y materiales nobles, hecha para envejecer con gracia.</p>
+        <a href="productos.html" class="boton boton--principal">Ver productos</a>
+      </div>
+      <div class="hero__imagen">
+        <img src="images/Aparador Uspallata.png" alt="Aparador Uspallata: roble con puertas de rejilla, tapa de mármol y objetos de decoración">
+      </div>
+    </section>
+
+    <section id="sobre-nosotros" class="sobre-nosotros" aria-labelledby="historia-titulo">
+      <h2 id="historia-titulo">30 años de tradición</h2>
+      <p>
+        Hermanos Jota nace en la intersección entre herencia e innovación, donde la calidez del optimismo
+        de los años 60 se encuentra con la conciencia de la sustentabilidad de hoy. Desde 1996 combinamos
+        técnicas artesanales con diseño atemporal pensado para la vida cotidiana.
+      </p>
+      <p>
+        Trabajamos con madera certificada FSC de bosques responsables argentinos, priorizando maderas
+        nativas y acabados naturales. Cada pieza que sale de nuestro taller no es solo mobiliario: es una
+        filosofía de vida que honra el pasado mientras abraza el futuro.
+      </p>
+    </section>
+
+    <section id="destacados" class="destacados" aria-labelledby="destacados-titulo">
+      <h2 id="destacados-titulo">Productos destacados</h2>
+      <!-- Las tarjetas de producto se generan dinámicamente desde js/inicio.js -->
+      <div id="destacados-grid" class="destacados__grid"></div>
+    </section>
+  </main>
+
+  <footer class="pie">
+    <address class="pie__contacto">
+      Hermanos Jota — Casa Taller — Av. San Juan 2847, San Cristóbal, CABA
+      <br>
+      WhatsApp: +54 11 4567-8900 — Email: info@hermanosjota.com.ar
+    </address>
+    <p class="pie__copy">&copy; <span>1996–2026</span> Mueblería Hermanos Jota. 30 años de tradición.</p>
+  </footer>
+
+  <script src="js/productos.js"></script>
+  <script src="js/inicio.js"></script>
+</body>
+</html>
