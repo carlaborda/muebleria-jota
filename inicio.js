@@ -69,15 +69,4 @@ async function mostrarDestacados() {
   });
 }
 
-// Placeholder del carrito: todavía no hay lógica real de compras,
-// solo se deja el listener enganchado para no romper la navegación futura.
-function configurarCarrito() {
-  const carrito = document.querySelector(".cart-button");
-  carrito.addEventListener("click", (evento) => {
-    evento.preventDefault();
-    console.log("Carrito próximamente");
-  });
-}
-
 mostrarDestacados();
-configurarCarrito();

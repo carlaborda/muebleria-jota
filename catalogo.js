@@ -204,11 +204,24 @@ function renderizarProductos(lista) {
         <h3>${producto.nombre}</h3>
         <p>${producto.descripcion}</p>
         <span class="precio">$${producto.precio.toLocaleString('es-AR')}</span>
-        <a href="producto.html?id=${producto.id}" class="btn-ver-producto">Ver producto</a>
+        <div class="producto-card-acciones">
+          <a href="producto.html?id=${producto.id}" class="btn-ver-producto">Ver producto</a>
+          <button type="button" class="btn-agregar-catalogo" data-id="${producto.id}">Agregar al carrito</button>
+        </div>
       </div>
     `;
 
     contenedorCatalogo.appendChild(article);
+  });
+}
+
+// Delegación de eventos: un solo listener cubre las tarjetas que se
+// vuelven a renderizar en cada búsqueda (el contenedor no se recrea).
+if (contenedorCatalogo) {
+  contenedorCatalogo.addEventListener('click', (evento) => {
+    const boton = evento.target.closest('.btn-agregar-catalogo');
+    if (!boton) return;
+    agregarAlCarrito(Number(boton.dataset.id), 1);
   });
 }
 

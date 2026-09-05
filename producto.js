@@ -50,4 +50,15 @@ document.addEventListener("DOMContentLoaded", () => {
       listaSpecs.appendChild(li);
     });
   }
+
+  // 6. Conectar el botón "Añadir al Carrito" con el carrito persistente
+  const botonAgregar = document.querySelector(".btn-agregar-carrito");
+  const inputCantidad = document.getElementById("cantidad");
+
+  if (botonAgregar) {
+    botonAgregar.addEventListener("click", () => {
+      const cantidad = Math.max(1, Number(inputCantidad.value) || 1);
+      agregarAlCarrito(item.id, cantidad);
+    });
+  }
 });
