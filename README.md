@@ -46,25 +46,6 @@ No hay `package.json` ni dependencias: los `<script>` se cargan directo
 en cada HTML, en este orden (`cart.js` siempre primero para que el
 contador del carrito esté disponible antes de cualquier otro script).
 
-## Cómo correrlo en local
-
-Al ser HTML/CSS/JS estático, alcanza con servirlo con cualquier servidor
-de archivos estáticos. Por ejemplo, con Node:
-
-```bash
-npx serve .
-```
-
-o con Python:
-
-```bash
-python3 -m http.server 5500
-```
-
-Después abrir `http://localhost:5500` (o el puerto que indique la
-herramienta elegida). No usar `file://` directamente en el navegador:
-algunas rutas relativas pueden comportarse distinto según el navegador
-cuando no hay un servidor HTTP real de por medio.
 
 ## Stack
 
@@ -87,19 +68,4 @@ desde `producto.html` (con la cantidad elegida) o desde las tarjetas de
 `productos.html`. El contador se actualiza solo al cargar cualquier
 página, así que persiste al navegar por el sitio.
 
-## Deploy
 
-**Estado:** pendiente de publicación por la persona propietaria del
-repositorio. Una vez desplegado, se agregará aquí la URL pública.
-
-El sitio no necesita build ni configuración especial: es HTML/CSS/JS
-estático servido tal cual. Para desplegarlo en [Vercel](https://vercel.com):
-
-1. Importar el repositorio desde el dashboard de Vercel (o conectar la
-   cuenta de GitHub).
-2. Framework preset: **Other** (no hay build step).
-3. Build command: dejar vacío.
-4. Output directory: la raíz del proyecto (`.`).
-
-Cualquier otro hosting de archivos estáticos (Netlify, GitHub Pages,
-etc.) funciona igual, sin cambios en el código.
