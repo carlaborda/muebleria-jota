@@ -6,12 +6,6 @@ const showFormMessage = (message, type) => {
   formMessage.className = `form-message ${type}`;
 };
 
-// Simula el tiempo de respuesta de un servidor sin enviar datos fuera
-// del navegador. El sitio se mantiene completamente del lado del cliente.
-const simularEnvio = () => new Promise((resolve) => {
-  setTimeout(resolve, 800);
-});
-
 if (contactForm) {
   contactForm.addEventListener('submit', async (event) => {
     event.preventDefault();
@@ -37,12 +31,23 @@ if (contactForm) {
     showFormMessage('Enviando tu consulta...', 'success');
 
     try {
-      await simularEnvio();
+      const response = await fetch(contactForm.action, {
+        method: 'POST',
+        body: new FormData(contactForm),
+        headers: {
+          Accept: 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Formspree rechazó el envío.');
+      }
+
       showFormMessage(`Gracias ${nombre}. Tu consulta fue enviada con éxito.`, 'success');
       contactForm.reset();
     } catch (error) {
       showFormMessage('No pudimos enviar tu consulta. Intentá nuevamente.', 'error');
-      console.error('Error al simular el envío:', error);
+      console.error('Error al enviar el formulario:', error);
     } finally {
       submitButton.disabled = false;
     }

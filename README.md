@@ -36,7 +36,7 @@ step y sin backend.
 ├── catalogo.js          # datos de los 11 productos + render de index/productos
 ├── inicio.js            # lógica específica de index.html (destacados)
 ├── producto.js          # lógica específica de producto.html (detalle)
-├── contacto.js           # validación y envío simulado del formulario
+├── contacto.js           # validación y envío asíncrono a Formspree
 └── img/
     ├── logo.svg
     └── *.png             # fotos de producto
@@ -55,8 +55,8 @@ contador del carrito esté disponible antes de cualquier otro script).
   compartida (header, marca, carrito, footer) y una sección por página.
 - JavaScript vanilla (sin frameworks ni bundlers), `localStorage` para
   persistir el carrito entre páginas.
-- Formulario validado y enviado de manera simulada en el navegador, sin
-  transmitir información a un backend.
+- Formulario validado con JavaScript y enviado de manera asíncrona a Formspree,
+  sin recargar la página.
 - Tipografías: Inter y Playfair Display, vía Google Fonts.
 
 ## Carrito de compras
