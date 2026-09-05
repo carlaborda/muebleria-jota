@@ -4,6 +4,16 @@ Sitio web de catálogo para una mueblería ficticia ("Hermanos Jota"). Es un
 sitio estático de HTML, CSS y JavaScript puro: sin frameworks, sin build
 step y sin backend.
 
+## Integrantes — Grupo 4
+
+| Integrante |
+| :--------: |
+| Almada Alejo Matías |
+| Luciano Losardo |
+| Sebastian Paz Friaz |
+| Marcos Ezequiel Diaz |
+| Borda Carla |
+
 ## Páginas
 
 | Página            | Descripción                                              |
@@ -26,7 +36,7 @@ step y sin backend.
 ├── catalogo.js          # datos de los 11 productos + render de index/productos
 ├── inicio.js            # lógica específica de index.html (destacados)
 ├── producto.js          # lógica específica de producto.html (detalle)
-├── contacto.js           # lógica específica de contacto.html (formulario)
+├── contacto.js           # validación y envío simulado del formulario
 └── img/
     ├── logo.svg
     └── *.png             # fotos de producto
@@ -53,9 +63,8 @@ python3 -m http.server 5500
 
 Después abrir `http://localhost:5500` (o el puerto que indique la
 herramienta elegida). No usar `file://` directamente en el navegador:
-algunas rutas relativas y el `fetch` del formulario de contacto pueden
-comportarse distinto según el navegador cuando no hay un servidor HTTP
-real de por medio.
+algunas rutas relativas pueden comportarse distinto según el navegador
+cuando no hay un servidor HTTP real de por medio.
 
 ## Stack
 
@@ -65,6 +74,8 @@ real de por medio.
   compartida (header, marca, carrito, footer) y una sección por página.
 - JavaScript vanilla (sin frameworks ni bundlers), `localStorage` para
   persistir el carrito entre páginas.
+- Formulario validado y enviado de manera simulada en el navegador, sin
+  transmitir información a un backend.
 - Tipografías: Inter y Playfair Display, vía Google Fonts.
 
 ## Carrito de compras
@@ -77,6 +88,9 @@ desde `producto.html` (con la cantidad elegida) o desde las tarjetas de
 página, así que persiste al navegar por el sitio.
 
 ## Deploy
+
+**Estado:** pendiente de publicación por la persona propietaria del
+repositorio. Una vez desplegado, se agregará aquí la URL pública.
 
 El sitio no necesita build ni configuración especial: es HTML/CSS/JS
 estático servido tal cual. Para desplegarlo en [Vercel](https://vercel.com):
