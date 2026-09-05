@@ -92,11 +92,12 @@
 
             <form
               id="contact-form"
-              novalidate
+              action="https://formspree.io/f/mqpklkej"
+              method="POST"
             >
               <div class="form-group">
                 <label for="nombre">Nombre</label>
-                <input id="nombre" name="nombre" type="text" placeholder="Tu nombre" />
+                <input id="nombre" name="nombre" type="text" placeholder="Tu nombre" required />
               </div>
 
               <div class="form-group">
@@ -106,6 +107,7 @@
                   name="email"
                   type="email"
                   placeholder="tuemail@ejemplo.com"
+                  required
                 />
               </div>
 
@@ -116,6 +118,7 @@
                   name="mensaje"
                   rows="6"
                   placeholder="Contanos qué necesitas..."
+                  required
                 ></textarea>
               </div>
 
@@ -175,6 +178,5 @@
     </footer>
 
     <script src="cart.js"></script>
-    <script src="contacto.js"></script>
   </body>
 </html>
