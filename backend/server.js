@@ -1,10 +1,16 @@
 const express = require('express');
 const path = require('path');
 const productosRouter = require('./routes/productos');
+const logger = require('./mi-logger.js');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Middleware logger
+app.use(logger);
+
+//Middleware para peticiones POST O PUT
+app.use(express.json());
 
 // Montaje del router modular
 app.use('/api/productos', productosRouter);
