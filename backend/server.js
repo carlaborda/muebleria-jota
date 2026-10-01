@@ -24,6 +24,17 @@ app.use((req, res) => {
   res.status(404).send('Página no encontrada');
 });
 
+// Middleware de errores generales (4 parámetros)
+app.use((err, req, res, next) => {
+  console.error('[Error de servidor]:', err.message);
+  
+  const statusCode = err.status || err.statusCode || 500;
+  res.status(statusCode).json({
+    error: true,
+    mensaje: err.message || 'Error interno del servidor'
+  });
+});
+
 app.listen(PORT, () => {
   console.log(`Servidor activo en http://localhost:${PORT}`);
 });

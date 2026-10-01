@@ -10,7 +10,13 @@ import { obtenerProductos } from "./servicios/api";
 
 function App() {
   // Navegación simple por estado: "inicio" | "productos" | "detalle" | "contacto" | "carrito"
-  const [vista, setVista] = useState("inicio");
+  const [vista, setVista] = useState(() => {
+  return localStorage.getItem("vistaActual") || "inicio";
+});
+
+useEffect(() => {
+  localStorage.setItem("vistaActual", vista);
+}, [vista]);
   const [productoSeleccionado, setProductoSeleccionado] = useState(null);
 
   // Catálogo traído del backend (GET /api/productos)
@@ -19,7 +25,14 @@ function App() {
   const [error, setError] = useState(null);
 
   // Carrito: [{ producto, cantidad }]
-  const [carrito, setCarrito] = useState([]);
+  const [carrito, setCarrito] = useState(() => {
+  const guardado = localStorage.getItem("carrito");
+  return guardado ? JSON.parse(guardado) : [];
+});
+
+useEffect(() => {
+  localStorage.setItem("carrito", JSON.stringify(carrito));
+}, [carrito]);
 
   const cargarProductos = useCallback((signal) => {
     setCargando(true);
