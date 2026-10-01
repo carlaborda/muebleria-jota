@@ -1,0 +1,68 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.form__campo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.form__campo label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--madera);
+}
+
+.form__campo input,
+.form__campo textarea {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  border: 1px solid var(--linea);
+  border-radius: var(--radio-sm);
+  background: var(--papel);
+  transition: border-color var(--transicion), box-shadow var(--transicion);
+}
+
+.form__campo textarea {
+  min-height: 150px;
+  resize: vertical;
+}
+
+.form__campo input:focus,
+.form__campo textarea:focus {
+  outline: none;
+  border-color: var(--oro);
+  box-shadow: 0 0 0 3px rgba(212, 164, 55, 0.2);
+}
+
+.form__campo [aria-invalid="true"] {
+  border-color: var(--rosa);
+}
+
+.form__error {
+  font-size: 0.8rem;
+  color: #a2483a;
+}
+
+.form .boton {
+  align-self: flex-start;
+}
+
+.form__mensaje {
+  padding: 0.8rem 1rem;
+  border-radius: var(--radio-sm);
+  font-weight: 600;
+}
+
+.form__mensaje--exito {
+  background: rgba(135, 169, 107, 0.15);
+  color: #365332;
+}
+
+.form__mensaje--error {
+  background: rgba(196, 122, 109, 0.12);
+  color: #7a3d31;
+}

@@ -1,8 +1,8 @@
 # Mueblería Hermanos Jota
 
-Sitio web de catálogo para una mueblería ficticia ("Hermanos Jota"). Es un
-sitio estático de HTML, CSS y JavaScript puro: sin frameworks, sin build
-step y sin backend.
+Catálogo online para una mueblería ficticia ("Hermanos Jota"). Aplicación
+de una sola página (SPA) en **React + Vite** que consume una **API REST en
+Node.js + Express**.
 
 ## Integrantes — Grupo 4
 
@@ -14,58 +14,70 @@ step y sin backend.
 | Marcos Ezequiel Diaz |
 | Borda Carla |
 
-## Páginas
+## Cómo correrlo
 
-| Página            | Descripción                                              |
-|--------------------|-----------------------------------------------------------|
-| `index.html`       | Inicio: hero, texto institucional y productos destacados. |
-| `productos.html`   | Catálogo completo con buscador por nombre/material/estilo. |
-| `producto.html`    | Detalle de un producto (`producto.html?id=<n>`).           |
-| `contacto.html`    | Información de contacto y formulario de consulta.          |
+Requiere Node.js 20.19 o superior (lo pide Vite). Se levantan dos procesos,
+cada uno en su terminal:
+
+```bash
+cd backend
+npm install
+npm run dev        # API en http://localhost:3000
+```
+
+```bash
+cd client
+npm install
+npm run dev        # Front en http://localhost:5173
+```
+
+En desarrollo, Vite redirige las peticiones a `/api` hacia el backend
+(ver `client/vite.config.js`), así que no hace falta configurar CORS.
+
+## API
+
+| Método | Ruta                  | Respuesta                                  |
+|--------|-----------------------|--------------------------------------------|
+| GET    | `/api/productos`      | Array con los 11 productos.                |
+| GET    | `/api/productos/:id`  | Un producto, o `404 { error }` si no existe. |
+
+Cualquier otra ruta bajo `/api` responde `404 { error: 'Endpoint no encontrado' }`.
+Todas las peticiones pasan por un middleware logger (`backend/mi-logger.js`).
 
 ## Estructura del proyecto
 
 ```
 .
-├── index.html
-├── productos.html
-├── producto.html
-├── contacto.html
-├── styles.css          # hoja de estilos única del sitio
-├── cart.js             # carrito de compras (localStorage), compartido
-├── catalogo.js          # datos de los 11 productos + render de index/productos
-├── inicio.js            # lógica específica de index.html (destacados)
-├── producto.js          # lógica específica de producto.html (detalle)
-├── contacto.js           # validación y envío asíncrono a Formspree
-└── img/
-    ├── logo.svg
-    └── *.png             # fotos de producto
+├── backend/
+│   ├── server.js            # app Express, middlewares y 404
+│   ├── mi-logger.js         # middleware que loguea método y ruta
+│   ├── routes/productos.js  # router modular de /api/productos
+│   └── data/catalogo.js     # datos de los productos
+└── client/
+    ├── public/              # logo e imágenes de productos
+    └── src/
+        ├── App.jsx          # estado global: vista actual, productos y carrito
+        ├── servicios/api.js # fetch a la API
+        ├── utils/formato.js # formato de precios
+        ├── styles/base.css  # variables, reset, botones y layout compartido
+        ├── componentes/     # Navbar, Footer, ProductList, ProductCard,
+        │                    # ProductDetail, ContactForm, Carrito, EstadoCarga
+        └── vistas/          # Inicio, Catalogo, Contacto
 ```
 
-No hay `package.json` ni dependencias: los `<script>` se cargan directo
-en cada HTML, en este orden (`cart.js` siempre primero para que el
-contador del carrito esté disponible antes de cualquier otro script).
+Cada componente importa su propio `.css`; los estilos globales están en
+`styles/base.css`.
 
+## Funcionalidades del front
 
-## Stack
-
-- HTML5 semántico.
-- CSS puro con variables (custom properties) para colores y tamaños,
-  organizado en una sola hoja (`styles.css`) por secciones: base
-  compartida (header, marca, carrito, footer) y una sección por página.
-- JavaScript vanilla (sin frameworks ni bundlers), `localStorage` para
-  persistir el carrito entre páginas.
-- Formulario validado con JavaScript y enviado de manera asíncrona a Formspree,
-  sin recargar la página.
-- Tipografías: Inter y Playfair Display, vía Google Fonts.
-
-## Carrito de compras
-
-El contador de carrito (`#cart-count`, visible en el header de las 4
-páginas) se guarda en `localStorage` bajo la clave `hermanosjota:cart`
-como un objeto `{ idProducto: cantidad }`. Se puede agregar productos
-desde `producto.html` (con la cantidad elegida) o desde las tarjetas de
-`productos.html`. El contador se actualiza solo al cargar cualquier
-página, así que persiste al navegar por el sitio.
-
-
+- **Catálogo desde la API**: `App` hace `fetch` a `GET /api/productos` al
+  montar y maneja los estados de carga, error (con botón para reintentar)
+  y lista vacía.
+- **Detalle de producto**: al hacer clic en una tarjeta se muestra
+  `ProductDetail`, que pide `GET /api/productos/:id`.
+- **Carrito**: vive como estado en `App` (`[{ producto, cantidad }]`). El
+  contador del `Navbar` llega por props. Se pueden sumar y restar unidades,
+  quitar productos y ver el total.
+- **Formulario de contacto**: controlado con `useState`, con validación
+  por campo y envío a Formspree.
+- **Buscador** en el catálogo, que filtra por nombre o descripción.

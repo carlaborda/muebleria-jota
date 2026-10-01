@@ -1,0 +1,122 @@
+.carrito {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.carrito__seguir {
+  margin-top: 1.5rem;
+}
+
+.carrito__lista {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.carrito__item {
+  display: grid;
+  grid-template-columns: 72px 1fr auto auto auto;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 1rem 0.75rem 0.75rem;
+  background: var(--blanco);
+  border: 1px solid var(--linea);
+  border-radius: var(--radio);
+}
+
+.carrito__item img {
+  width: 72px;
+  height: 72px;
+  object-fit: contain;
+  background: var(--marfil);
+  border-radius: var(--radio-sm);
+  padding: 0.35rem;
+}
+
+.carrito__info h3 {
+  font-family: var(--fuente-texto);
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.carrito__info p {
+  font-size: 0.85rem;
+  color: var(--texto-suave);
+}
+
+.carrito__subtotal {
+  min-width: 7rem;
+  text-align: right;
+  font-weight: 700;
+}
+
+.carrito__quitar {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  font-size: 1.3rem;
+  line-height: 1;
+  color: var(--texto-suave);
+}
+
+.carrito__quitar:hover {
+  background: rgba(196, 122, 109, 0.15);
+  color: #7a3d31;
+}
+
+.carrito__resumen {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1.5rem;
+  background: var(--blanco);
+  border: 1px solid var(--linea);
+  border-radius: var(--radio);
+  box-shadow: var(--sombra);
+}
+
+.carrito__total {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--linea);
+}
+
+.carrito__total strong {
+  font-size: 1.4rem;
+  color: var(--siena);
+}
+
+@media (min-width: 900px) {
+  .carrito {
+    grid-template-columns: 1fr 300px;
+  }
+
+  .carrito__resumen {
+    position: sticky;
+    top: 96px;
+  }
+}
+
+@media (max-width: 600px) {
+  .carrito__item {
+    grid-template-columns: 60px 1fr auto;
+    grid-template-areas:
+      "img info quitar"
+      "img cantidad subtotal";
+  }
+
+  .carrito__item img {
+    grid-area: img;
+    width: 60px;
+    height: 60px;
+  }
+
+  .carrito__info { grid-area: info; }
+  .carrito__item .cantidad { grid-area: cantidad; justify-self: start; }
+  .carrito__subtotal { grid-area: subtotal; min-width: 0; }
+  .carrito__quitar { grid-area: quitar; justify-self: end; }
+}

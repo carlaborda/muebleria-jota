@@ -1,0 +1,64 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--blanco);
+  border: 1px solid var(--linea);
+  border-radius: var(--radio);
+  box-shadow: var(--sombra);
+  transition: transform var(--transicion), box-shadow var(--transicion);
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--sombra-hover);
+}
+
+.card__imagen {
+  display: block;
+  aspect-ratio: 4 / 3;
+  background: var(--marfil);
+  overflow: hidden;
+}
+
+.card__imagen img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 1rem;
+  transition: transform 0.4s ease;
+}
+
+.card:hover .card__imagen img {
+  transform: scale(1.04);
+}
+
+.card__cuerpo {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 1.1rem 1.25rem 1.25rem;
+}
+
+.card__nombre {
+  font-family: var(--fuente-texto);
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.card__precio {
+  font-weight: 700;
+  color: var(--siena);
+}
+
+.card__acciones {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: auto;
+  padding-top: 0.75rem;
+}
+
+.card__acciones .boton {
+  flex: 1;
+}
