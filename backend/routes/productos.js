@@ -1,7 +1,7 @@
 // routes/productos.js
 const express = require('express');
 const router = express.Router();
-const productos = require('../../client/src/data/catalogo');
+const productos = require('../data/catalogo');
 
 // GET /api/productos
 router.get('/', (req, res) => {

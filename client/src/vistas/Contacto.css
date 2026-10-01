@@ -1,0 +1,52 @@
+.contacto__encabezado {
+  max-width: 42rem;
+  margin-bottom: 2rem;
+}
+
+.contacto__encabezado .titulo-seccion {
+  margin-bottom: 0.75rem;
+}
+
+.contacto__encabezado p:last-child {
+  color: var(--texto-suave);
+}
+
+.contacto__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.contacto__grid h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.contacto__info {
+  background: var(--bosque);
+  border: none;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.contacto__info h2 {
+  color: var(--marfil);
+}
+
+.contacto__info dt {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--oro);
+}
+
+.contacto__info dd {
+  margin-bottom: 1rem;
+}
+
+@media (min-width: 800px) {
+  .contacto__grid {
+    grid-template-columns: 1.5fr 1fr;
+  }
+}
