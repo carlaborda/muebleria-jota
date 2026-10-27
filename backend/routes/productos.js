@@ -1,3 +1,6 @@
+// API RESTful con CRUD (GET, POST, PUT, DELETE)
+
+
 // routes/productos.js
 const express = require('express');
 const router = express.Router();

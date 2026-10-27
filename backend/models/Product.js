@@ -1,0 +1,1 @@
+// Modelo con: nombre, descripcion, precio, stock, imagenUrl

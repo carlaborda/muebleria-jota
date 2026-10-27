@@ -1,3 +1,5 @@
+// Conexión a MongoDB con Mongoose e inicio de Express
+
 const express = require('express');
 const path = require('path');
 const productosRouter = require('./routes/productos');

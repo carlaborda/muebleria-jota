@@ -1,3 +1,5 @@
+// Ruta: /contacto
+
 import ContactForm from "../componentes/ContactForm";
 import "./Contacto.css";
 

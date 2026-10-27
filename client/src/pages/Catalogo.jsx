@@ -1,3 +1,5 @@
+// Ruta: /productos
+
 import { useState } from "react";
 import ProductList from "../componentes/ProductList";
 
