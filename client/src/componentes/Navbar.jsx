@@ -1,44 +1,29 @@
 import "./Navbar.css";
+import { Link } from 'react-router-dom';
 
-const ENLACES = [
-  { vista: "inicio", texto: "Inicio" },
-  { vista: "productos", texto: "Productos" },
-  { vista: "contacto", texto: "Contacto" },
-];
 
-function Navbar({ vistaActual, onNavegar, cantidadCarrito }) {
-  // El detalle de producto cuenta como parte de "Productos" para resaltar el enlace
-  const seccionActiva = vistaActual === "detalle" ? "productos" : vistaActual;
+
+function Navbar({ cantidadCarrito }) {
 
   return (
     <header className="navbar">
       <div className="contenedor navbar__inner">
-        <button className="navbar__marca" onClick={() => onNavegar("inicio")} aria-label="Ir a inicio">
+        <Link to="/" className="navbar__marca" aria-label="Ir a inicio">
           <img src="/logo.svg" alt="" />
           <span>
             <strong>Hermanos</strong> Jota
           </span>
-        </button>
+        </Link>
 
-        <nav aria-label="Menú principal">
-          <ul className="navbar__enlaces">
-            {ENLACES.map(({ vista, texto }) => (
-              <li key={vista}>
-                <button
-                  className="navbar__enlace"
-                  aria-current={seccionActiva === vista ? "page" : undefined}
-                  onClick={() => onNavegar(vista)}
-                >
-                  {texto}
-                </button>
-              </li>
-            ))}
-          </ul>
+        <nav aria-label="Menú principal" className="navbar__enlaces">
+          <Link to="/" className="navbar__enlace">Inicio</Link>
+          <Link to="/contacto" className="navbar__enlace">Sobre Nosotros</Link>
+          <Link to="/productos" className="navbar__enlace" >Productos</Link>
         </nav>
 
-        <button
+        <Link 
+          to="/"
           className="navbar__carrito"
-          onClick={() => onNavegar("carrito")}
           aria-label={`Ver carrito, ${cantidadCarrito} productos`}
         >
           <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -47,7 +32,7 @@ function Navbar({ vistaActual, onNavegar, cantidadCarrito }) {
           </svg>
           <span className="navbar__carrito-texto">Carrito</span>
           <span className="navbar__contador">{cantidadCarrito}</span>
-        </button>
+        </Link>
       </div>
     </header>
   );

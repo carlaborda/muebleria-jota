@@ -1,6 +1,4 @@
 // Ruta: /
-
-
 import ProductList from "../componentes/ProductList";
 import "./Inicio.css";
 

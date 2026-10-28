@@ -1,6 +1,7 @@
+import { Link } from "react-router-dom";
 import "./Footer.css";
 
-function Footer({ onNavegar }) {
+function Footer() {
   const anio = new Date().getFullYear();
 
   return (
@@ -38,9 +39,9 @@ function Footer({ onNavegar }) {
         <div>
           <h3>Navegación</h3>
           <ul className="footer__lista">
-            <li><button onClick={() => onNavegar("inicio")}>Inicio</button></li>
-            <li><button onClick={() => onNavegar("productos")}>Productos</button></li>
-            <li><button onClick={() => onNavegar("contacto")}>Contacto</button></li>
+            <li><Link  to="/"> Inicio</Link></li>
+            <li><Link to="/productos"> Productos</Link></li>
+            <li><Link to="/contacto"> Contacto</Link></li>
           </ul>
         </div>
       </div>

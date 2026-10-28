@@ -1,23 +1,17 @@
 import { useCallback, useEffect, useState } from "react";
+import { Routes, Route, useNavigate } from 'react-router-dom';
 import Navbar from "./componentes/Navbar";
 import Footer from "./componentes/Footer";
 import ProductDetail from "./componentes/ProductDetail";
 import Carrito from "./componentes/Carrito";
-import Inicio from "./vistas/Inicio";
-import Catalogo from "./vistas/Catalogo";
-import Contacto from "./vistas/Contacto";
+import Inicio from "./pages/Inicio";
+import Catalogo from "./pages/Catalogo";
+import Contacto from "./pages/Contacto";
 import { obtenerProductos } from "./servicios/api";
 
 function App() {
-  // Navegación simple por estado: "inicio" | "productos" | "detalle" | "contacto" | "carrito"
-  const [vista, setVista] = useState(() => {
-  return localStorage.getItem("vistaActual") || "inicio";
-});
-
-useEffect(() => {
-  localStorage.setItem("vistaActual", vista);
-}, [vista]);
-  const [productoSeleccionado, setProductoSeleccionado] = useState(null);
+ 
+  const navigate = useNavigate();
 
   // Catálogo traído del backend (GET /api/productos)
   const [productos, setProductos] = useState([]);
@@ -26,9 +20,9 @@ useEffect(() => {
 
   // Carrito: [{ producto, cantidad }]
   const [carrito, setCarrito] = useState(() => {
-  const guardado = localStorage.getItem("carrito");
-  return guardado ? JSON.parse(guardado) : [];
-});
+    const guardado = localStorage.getItem("carrito");
+    return guardado ? JSON.parse(guardado) : [];
+  });
 
 useEffect(() => {
   localStorage.setItem("carrito", JSON.stringify(carrito));
@@ -96,37 +90,27 @@ useEffect(() => {
     cargando,
     error,
     onReintentar: () => cargarProductos(),
-    onVerDetalle: verDetalle,
     onAgregar: agregarAlCarrito,
   };
 
   return (
     <div className="app">
-      <Navbar vistaActual={vista} onNavegar={navegar} cantidadCarrito={cantidadEnCarrito} />
-
+      <Navbar cantidadCarrito={cantidadEnCarrito} />
+      
       <main className="app-main">
-        {vista === "inicio" && <Inicio {...estadoCatalogo} onNavegar={navegar} />}
-        {vista === "productos" && <Catalogo {...estadoCatalogo} />}
-        {vista === "detalle" && (
-          <ProductDetail
-            productoId={productoSeleccionado}
-            onAgregar={agregarAlCarrito}
-            onVolver={() => navegar("productos")}
-          />
-        )}
-        {vista === "contacto" && <Contacto />}
-        {vista === "carrito" && (
-          <Carrito
-            items={carrito}
-            onCambiarCantidad={cambiarCantidad}
-            onQuitar={quitarDelCarrito}
-            onVaciar={() => setCarrito([])}
-            onSeguirComprando={() => navegar("productos")}
-          />
-        )}
+        <Routes>
+          <Route path="/" element={<Inicio {...estadoCatalogo} />} />
+          <Route path="/contacto" element={<Contacto />} />
+          <Route path="/productos" element={<Catalogo {...estadoCatalogo} />} />
+
+          {/* Rutas dinámicas y de administración */}
+
+          <Route path="/productos/:id" element={<ProductDetail onAgregar={agregarAlCarrito} onVolver={() => navigate("/productos")} />} />
+          <Route path="/admin/crear-producto" element={<Contacto />} />
+        </Routes>
       </main>
 
-      <Footer onNavegar={navegar} />
+      <Footer />
     </div>
   );
 }
