@@ -4,7 +4,7 @@ import "./Inicio.css";
 
 const CANTIDAD_DESTACADOS = 4;
 
-function Inicio({ onNavegar, productos, ...estadoCatalogo }) {
+function Inicio({ ...estadoCatalogo }) {
   return (
     <>
       <section className="hero">

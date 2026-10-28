@@ -3,7 +3,7 @@
 import { useState } from "react";
 import ProductList from "../componentes/ProductList";
 
-function Catalogo({ productos, ...estadoCatalogo }) {
+function Catalogo({ ...estadoCatalogo }) {
   const [busqueda, setBusqueda] = useState("");
 
   const termino = busqueda.trim().toLowerCase();
