@@ -4,8 +4,9 @@
   "description": "Sitio web de catálogo para una mueblería ficticia (\"Hermanos Jota\"). Es un\r sitio estático de HTML, CSS y JavaScript puro: sin frameworks, sin build\r step y sin backend.",
   "main": "app.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "nodemon server.js",
+    "start": "node --env-file=.env app.js",
+    "dev": "node --env-file=.env --watch app.js",
+    "seed": "node --env-file=.env seed.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

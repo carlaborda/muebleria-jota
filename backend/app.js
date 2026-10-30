@@ -5,9 +5,6 @@ const app = express();
 const PORT = process.env.PORT || 3000;
  
 
-// Si usas MongoDB Atlas (¡reemplaza con tu propia cadena de conexión!):
-// Para obtener esta cadena, ve a tu Cluster en Atlas, haz clic en "Connect",
-// luego "Connect your application" y copia la URL.
 const DB_URI = process.env.MONGO_URI;
  
  
