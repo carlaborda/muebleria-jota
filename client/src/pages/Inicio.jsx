@@ -1,10 +1,14 @@
 // Ruta: /
+import { Link } from "react-router-dom";
 import ProductList from "../componentes/ProductList";
 import "./Inicio.css";
 
 const CANTIDAD_DESTACADOS = 4;
 
-function Inicio({ ...estadoCatalogo }) {
+function Inicio({ productos, cargando, error, onAgregar }) {
+  // Prevenimos errores si 'productos' llega undefined en el primer renderizado
+  const productosDestacados = productos ? productos.slice(0, CANTIDAD_DESTACADOS) : [];
+
   return (
     <>
       <section className="hero">
@@ -16,9 +20,9 @@ function Inicio({ ...estadoCatalogo }) {
               Cada pieza cuenta la historia de manos expertas y materiales nobles,
               hecha para envejecer con gracia.
             </p>
-            <button className="boton boton--principal boton--grande" onClick={() => onNavegar("productos")}>
+            <Link to="/productos" className="boton boton--principal boton--grande" >
               Ver productos
-            </button>
+            </Link>
           </div>
           <div className="hero__imagen">
             <img
@@ -46,11 +50,16 @@ function Inicio({ ...estadoCatalogo }) {
       <section className="contenedor seccion">
         <div className="seccion__encabezado">
           <h2 className="titulo-seccion">Productos destacados</h2>
-          <button className="boton boton--link" onClick={() => onNavegar("productos")}>
+          <Link to="/productos" className="boton boton--link" >
             Ver todo →
-          </button>
+          </Link>
         </div>
-        <ProductList productos={productos.slice(0, CANTIDAD_DESTACADOS)} {...estadoCatalogo} />
+        <ProductList 
+          productos={productosDestacados} 
+          cargando={cargando} 
+          error={error} 
+          onAgregar={onAgregar} 
+        />
       </section>
     </>
   );

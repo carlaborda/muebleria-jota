@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import EstadoCarga from "./EstadoCarga";
+import EstadoCarga from "../componentes/EstadoCarga";
 import { obtenerProducto } from "../servicios/api";
 import { formatearClave, formatearPrecio } from "../utils/formato";
 import "./ProductDetail.css";

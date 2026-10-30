@@ -2,11 +2,12 @@ import { useCallback, useEffect, useState } from "react";
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import Navbar from "./componentes/Navbar";
 import Footer from "./componentes/Footer";
-import ProductDetail from "./componentes/ProductDetail";
+import ProductDetail from "./pages/ProductDetail";
 import Carrito from "./componentes/Carrito";
 import Inicio from "./pages/Inicio";
 import Catalogo from "./pages/Catalogo";
 import Contacto from "./pages/Contacto";
+import CrearProducto from "./pages/CrearProducto";
 import { obtenerProductos } from "./servicios/api";
 
 function App() {
@@ -106,7 +107,7 @@ useEffect(() => {
           {/* Rutas dinámicas y de administración */}
 
           <Route path="/productos/:id" element={<ProductDetail onAgregar={agregarAlCarrito} onVolver={() => navigate("/productos")} />} />
-          <Route path="/admin/crear-producto" element={<Contacto />} />
+          <Route path="/admin/crear-producto" element={<CrearProducto />} />
         </Routes>
       </main>
 

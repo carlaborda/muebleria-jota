@@ -3,11 +3,11 @@
 import { useState } from "react";
 import ProductList from "../componentes/ProductList";
 
-function Catalogo({ ...estadoCatalogo }) {
+function Catalogo({ productos, cargando, error, onAgregar, onReintentar }) {
   const [busqueda, setBusqueda] = useState("");
 
   const termino = busqueda.trim().toLowerCase();
-  const filtrados = productos.filter(
+  const filtrados = (productos || []).filter(
     (p) =>
       p.nombre.toLowerCase().includes(termino) ||
       p.descripcion.toLowerCase().includes(termino)
@@ -27,8 +27,13 @@ function Catalogo({ ...estadoCatalogo }) {
           />
         </label>
       </div>
-
-      <ProductList productos={filtrados} {...estadoCatalogo} />
+      <ProductList 
+        productos={filtrados} 
+        cargando={cargando}
+        error={error}
+        onAgregar={onAgregar}
+        onReintentar={onReintentar}
+      />
     </div>
   );
 }

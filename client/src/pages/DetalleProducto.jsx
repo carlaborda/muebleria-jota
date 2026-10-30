@@ -1,1 +1,0 @@
-// Ruta: /productos/:id (usa useParams)
