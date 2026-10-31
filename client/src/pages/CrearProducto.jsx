@@ -1,26 +1,28 @@
-// Ruta: /admin/crear-producto (Formulario controlado)
-import { useState } from "react";
+// Rutas: /admin/crear-producto y /admin/editar-producto/:id (Formulario controlado)
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import EstadoCarga from "../componentes/EstadoCarga";
+import { actualizarProducto, crearProducto, obtenerProducto } from "../servicios/api";
 
-import "../componentes/ContactForm.css"; 
+import "../componentes/ContactForm.css";
 
-const API_URL = "/api/productos";
-// El modelo exige nombre y precio requeridos, el resto son opcionales[cite: 4]
-const DATOS_INICIALES = { 
-  nombre: "", 
-  descripcion: "", 
-  precio: "", 
-  stock: "", 
-  imagenUrl: "" 
+// El modelo exige nombre y precio requeridos, el resto son opcionales
+const DATOS_INICIALES = {
+  nombre: "",
+  descripcion: "",
+  precio: "",
+  stock: "",
+  imagenUrl: ""
 };
 
 function validar(datos) {
   const errores = {};
-  
+
   // Validación de campos requeridos
   if (datos.nombre.trim().length < 2) {
     errores.nombre = "El nombre del producto es obligatorio (mínimo 2 caracteres).";
   }
-  
+
   if (!datos.precio || isNaN(datos.precio) || Number(datos.precio) <= 0) {
     errores.precio = "El precio es obligatorio y debe ser un número mayor a 0.";
   }
@@ -33,16 +35,56 @@ function validar(datos) {
   return errores;
 }
 
-export default function CrearProducto() {
+export default function CrearProducto({ onGuardado }) {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const editando = Boolean(id);
+
   const [datos, setDatos] = useState(DATOS_INICIALES);
   const [errores, setErrores] = useState({});
-  // Estados: "inicial" | "enviando" | "exito" | "error"
-  const [estado, setEstado] = useState("inicial");
+  // Estados: "inicial" | "cargando" | "error-carga" | "enviando" | "error"
+  const [estado, setEstado] = useState(editando ? "cargando" : "inicial");
+  const [mensajeError, setMensajeError] = useState("");
+
+  // En edición, GET /api/productos/:id para precargar el formulario
+  useEffect(() => {
+    setErrores({});
+    setMensajeError("");
+
+    if (!id) {
+      setDatos(DATOS_INICIALES);
+      setEstado("inicial");
+      return;
+    }
+
+    const controlador = new AbortController();
+    setEstado("cargando");
+
+    obtenerProducto(id, controlador.signal)
+      .then((producto) => {
+        setDatos({
+          nombre: producto.nombre,
+          descripcion: producto.descripcion ?? "",
+          precio: String(producto.precio),
+          stock: String(producto.stock ?? ""),
+          imagenUrl: producto.imagenUrl ?? "",
+        });
+        setEstado("inicial");
+      })
+      .catch((err) => {
+        if (err.name !== "AbortError") {
+          setMensajeError(err.message);
+          setEstado("error-carga");
+        }
+      });
+
+    return () => controlador.abort();
+  }, [id]);
 
   function manejarCambio(evento) {
     const { name, value } = evento.target;
     setDatos((actual) => ({ ...actual, [name]: value }));
-    
+
     if (errores[name]) {
       setErrores((actual) => ({ ...actual, [name]: undefined }));
     }
@@ -56,7 +98,7 @@ export default function CrearProducto() {
     if (Object.keys(nuevosErrores).length > 0) return;
 
     setEstado("enviando");
-    
+
     // Formatear los datos para que coincidan con los tipos del modelo (Number y String)
     const productoAEnviar = {
       ...datos,
@@ -65,38 +107,41 @@ export default function CrearProducto() {
     };
 
     try {
-      // Petición POST para crear un producto
-      const respuesta = await fetch(API_URL, {
-        method: "POST",
-        headers: { 
-          "Content-Type": "application/json", 
-          Accept: "application/json" 
-        },
-        body: JSON.stringify(productoAEnviar),
-      });
+      const guardado = editando
+        ? await actualizarProducto(id, productoAEnviar)
+        : await crearProducto(productoAEnviar);
 
-      // El backend debería responder con código 201 al crear
-      if (!respuesta.ok && respuesta.status !== 201) {
-        throw new Error("Error al crear el producto");
-      }
-
-      setEstado("exito");
-      setDatos(DATOS_INICIALES); // Limpiar formulario tras el éxito
-      
-      // Opcional: Volver al estado inicial después de unos segundos
-      setTimeout(() => setEstado("inicial"), 4000);
-      
-    } catch {
+      onGuardado(guardado);
+      navigate(`/productos/${guardado.id}`);
+    } catch (err) {
+      setErrores(err.detalles ?? {});
+      setMensajeError(err.message);
       setEstado("error");
     }
   }
 
+  if (estado === "cargando") {
+    return (
+      <div className="contenedor seccion">
+        <EstadoCarga tipo="cargando" mensaje="Cargando producto..." />
+      </div>
+    );
+  }
+
+  if (estado === "error-carga") {
+    return (
+      <div className="contenedor seccion">
+        <EstadoCarga tipo="error" mensaje={mensajeError} />
+      </div>
+    );
+  }
+
   return (
     <div className="contenedor">
-      <h2>Alta de producto</h2>
+      <h2>{editando ? "Editar producto" : "Alta de producto"}</h2>
       <form className="form" onSubmit={manejarEnvio} noValidate>
-        
-        
+
+
         <div className="form__campo">
           <label htmlFor="nombre">Nombre *</label>
           <input
@@ -111,7 +156,7 @@ export default function CrearProducto() {
           {errores.nombre && <span className="form__error">{errores.nombre}</span>}
         </div>
 
-        
+
         <div className="form__campo">
           <label htmlFor="precio">Precio ($) *</label>
           <input
@@ -127,7 +172,7 @@ export default function CrearProducto() {
           {errores.precio && <span className="form__error">{errores.precio}</span>}
         </div>
 
-    
+
         <div className="form__campo">
           <label htmlFor="descripcion">Descripción</label>
           <textarea
@@ -140,7 +185,7 @@ export default function CrearProducto() {
           />
         </div>
 
-       
+
         <div className="form__campo">
           <label htmlFor="stock">Stock Disponible</label>
           <input
@@ -156,7 +201,7 @@ export default function CrearProducto() {
           {errores.stock && <span className="form__error">{errores.stock}</span>}
         </div>
 
-       
+
         <div className="form__campo">
           <label htmlFor="imagenUrl">URL de la Imagen</label>
           <input
@@ -169,22 +214,17 @@ export default function CrearProducto() {
           />
         </div>
 
-        <button 
-          className="boton boton--principal boton--grande" 
-          type="submit" 
+        <button
+          className="boton boton--principal boton--grande"
+          type="submit"
           disabled={estado === "enviando"}
         >
-          {estado === "enviando" ? "Guardando..." : "Crear Producto"}
+          {estado === "enviando" ? "Guardando..." : editando ? "Guardar cambios" : "Crear Producto"}
         </button>
 
-        {estado === "exito" && (
-          <p className="form__mensaje form__mensaje--exito" role="status">
-            ¡Producto creado correctamente en la base de datos!
-          </p>
-        )}
         {estado === "error" && (
           <p className="form__mensaje form__mensaje--error" role="alert">
-            Hubo un problema al conectar con el servidor. Revisá la consola para más detalles.
+            {mensajeError}
           </p>
         )}
       </form>

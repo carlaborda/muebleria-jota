@@ -2,7 +2,7 @@ import ProductCard from "./ProductCard";
 import EstadoCarga from "./EstadoCarga";
 import "./ProductList.css";
 
-function ProductList({ productos, cargando, error, onReintentar, onVerDetalle, onAgregar }) {
+function ProductList({ productos, cargando, error, onReintentar, onAgregar }) {
   if (cargando) {
     return <EstadoCarga tipo="cargando" mensaje="Cargando productos..." />;
   }
@@ -27,7 +27,6 @@ function ProductList({ productos, cargando, error, onReintentar, onVerDetalle, o
         <ProductCard
           key={producto.id}
           producto={producto}
-          onVerDetalle={onVerDetalle}
           onAgregar={onAgregar}
         />
       ))}

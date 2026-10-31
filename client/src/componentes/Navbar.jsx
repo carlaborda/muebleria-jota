@@ -19,6 +19,7 @@ function Navbar({ cantidadCarrito }) {
           <Link to="/" className="navbar__enlace">Inicio</Link>
           <Link to="/contacto" className="navbar__enlace">Sobre Nosotros</Link>
           <Link to="/productos" className="navbar__enlace" >Productos</Link>
+          <Link to="/admin/crear-producto" className="navbar__enlace">Admin</Link>
         </nav>
 
         <Link 
