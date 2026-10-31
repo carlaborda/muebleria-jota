@@ -1,0 +1,140 @@
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: rgba(251, 247, 242, 0.92);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--linea);
+}
+
+.navbar__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 72px;
+}
+
+.navbar__marca {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  font-size: 0.85rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--siena);
+}
+
+.navbar__marca img {
+  height: 2.75rem;
+  width: auto;
+}
+
+.navbar__marca strong {
+  display: block;
+  font-weight: 700;
+}
+
+.navbar__enlaces {
+  display: flex;
+  gap: 1.75rem;
+}
+
+.navbar__enlace {
+  position: relative;
+  padding: 0.25rem 0;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--texto-suave);
+  transition: color var(--transicion);
+}
+
+.navbar__enlace::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 100%;
+  height: 2px;
+  border-radius: var(--radio-pill);
+  background: var(--salvia);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--transicion);
+}
+
+.navbar__enlace:hover,
+.navbar__enlace[aria-current="page"] {
+  color: var(--madera);
+}
+
+.navbar__enlace:hover::after,
+.navbar__enlace[aria-current="page"]::after {
+  transform: scaleX(1);
+}
+
+.navbar__carrito {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.6rem 0.5rem 1rem;
+  border-radius: var(--radio-pill);
+  background: var(--madera);
+  color: var(--marfil);
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: background-color var(--transicion);
+}
+
+.navbar__carrito:hover {
+  background: var(--siena-oscuro);
+}
+
+.navbar__carrito svg {
+  width: 1.15rem;
+  height: 1.15rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linejoin: round;
+}
+
+.navbar__contador {
+  display: grid;
+  place-items: center;
+  min-width: 1.6rem;
+  height: 1.6rem;
+  padding-inline: 0.3rem;
+  border-radius: var(--radio-pill);
+  background: var(--oro);
+  color: var(--madera);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+/* En pantallas chicas el menú pasa a una segunda fila */
+@media (max-width: 680px) {
+  .navbar__inner {
+    flex-wrap: wrap;
+    padding-block: 0.6rem;
+  }
+
+  .navbar nav {
+    order: 3;
+    width: 100%;
+    border-top: 1px solid var(--linea);
+    padding-top: 0.5rem;
+  }
+
+  .navbar__enlaces {
+    justify-content: space-around;
+  }
+
+  .navbar__carrito-texto {
+    display: none;
+  }
+
+  .navbar__carrito {
+    padding-left: 0.75rem;
+  }
+}

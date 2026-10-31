@@ -1,0 +1,270 @@
+/* =========================================================
+   Mueblería Hermanos Jota — estilos globales
+   Variables, reset, tipografía y piezas compartidas.
+   Los estilos de cada componente viven junto a su .jsx.
+   ========================================================= */
+
+/* ---------- Variables ---------- */
+:root {
+  /* Paleta */
+  --siena: #a0522d;
+  --siena-oscuro: #7b3d22;
+  --madera: #3a251f;
+  --salvia: #87a96b;
+  --salvia-oscuro: #5f7d4a;
+  --bosque: #27362d;
+  --oro: #d4a437;
+  --marfil: #f5e6d3;
+  --papel: #fbf7f2;
+  --blanco: #ffffff;
+  --rosa: #c47a6d;
+
+  /* Texto y bordes */
+  --texto: #1f1a18;
+  --texto-suave: #6a5a52;
+  --linea: rgba(58, 37, 31, 0.12);
+
+  /* Tipografía */
+  --fuente-texto: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --fuente-titulos: "Playfair Display", Georgia, serif;
+
+  /* Formas */
+  --radio-sm: 8px;
+  --radio: 16px;
+  --radio-pill: 999px;
+  --sombra: 0 10px 30px rgba(58, 37, 31, 0.08);
+  --sombra-hover: 0 16px 40px rgba(58, 37, 31, 0.14);
+  --transicion: 0.2s ease;
+}
+
+/* ---------- Reset ---------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--fuente-texto);
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--texto);
+  background: var(--papel);
+  -webkit-font-smoothing: antialiased;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--fuente-titulos);
+  color: var(--madera);
+  line-height: 1.15;
+}
+
+:focus-visible {
+  outline: 2px solid var(--oro);
+  outline-offset: 2px;
+}
+
+/* ---------- Layout ---------- */
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.app-main {
+  flex: 1;
+}
+
+.contenedor {
+  width: min(1180px, 100% - 2rem);
+  margin-inline: auto;
+}
+
+.seccion {
+  padding-block: 2.5rem 4rem;
+}
+
+.seccion__encabezado {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.75rem;
+}
+
+.seccion__encabezado .titulo-seccion {
+  margin-bottom: 0;
+}
+
+.titulo-seccion {
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  margin-bottom: 1.5rem;
+}
+
+.eyebrow {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--siena);
+  margin-bottom: 0.75rem;
+}
+
+.panel {
+  background: var(--blanco);
+  border: 1px solid var(--linea);
+  border-radius: var(--radio);
+  box-shadow: var(--sombra);
+  padding: clamp(1.25rem, 3vw, 2rem);
+}
+
+.visualmente-oculto {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+
+/* ---------- Botones ---------- */
+.boton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.2rem;
+  border-radius: var(--radio-pill);
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: background-color var(--transicion), color var(--transicion),
+    transform var(--transicion), box-shadow var(--transicion);
+}
+
+.boton:active {
+  transform: translateY(1px);
+}
+
+.boton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.boton--principal {
+  background: var(--siena);
+  color: var(--blanco);
+}
+
+.boton--principal:hover:not(:disabled) {
+  background: var(--siena-oscuro);
+  box-shadow: 0 8px 20px rgba(160, 82, 45, 0.25);
+}
+
+.boton--secundario {
+  background: transparent;
+  color: var(--madera);
+  border: 1px solid var(--linea);
+}
+
+.boton--secundario:hover {
+  border-color: var(--salvia);
+  background: rgba(135, 169, 107, 0.1);
+}
+
+.boton--link {
+  padding: 0.25rem 0;
+  color: var(--siena);
+  border-radius: 0;
+}
+
+.boton--link:hover {
+  color: var(--siena-oscuro);
+  text-decoration: underline;
+}
+
+.boton--grande {
+  padding: 0.85rem 1.75rem;
+  font-size: 1rem;
+}
+
+/* ---------- Selector de cantidad (detalle y carrito) ---------- */
+.cantidad {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--linea);
+  border-radius: var(--radio-pill);
+  background: var(--blanco);
+}
+
+.cantidad button {
+  width: 2.25rem;
+  height: 2.25rem;
+  font-size: 1.1rem;
+  border-radius: var(--radio-pill);
+  color: var(--madera);
+}
+
+.cantidad button:hover {
+  background: var(--marfil);
+}
+
+.cantidad span {
+  min-width: 2rem;
+  text-align: center;
+  font-weight: 600;
+}
+
+/* ---------- Buscador del catálogo ---------- */
+.buscador input {
+  width: min(320px, 100%);
+  padding: 0.65rem 1.1rem;
+  border: 1px solid var(--linea);
+  border-radius: var(--radio-pill);
+  background: var(--blanco);
+  transition: border-color var(--transicion), box-shadow var(--transicion);
+}
+
+.buscador input:focus {
+  outline: none;
+  border-color: var(--oro);
+  box-shadow: 0 0 0 3px rgba(212, 164, 55, 0.2);
+}
+
+@media (max-width: 600px) {
+  .buscador,
+  .buscador input {
+    width: 100%;
+  }
+}
