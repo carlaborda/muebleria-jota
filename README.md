@@ -157,7 +157,11 @@ funcionen al recargar la página en Vercel y Netlify respectivamente.
 
 ### URLs de producción
 
-Todavía no hay despliegues publicados.
+- **Frontend (Vercel):** https://muebleria-jota-zeta.vercel.app
+- **Backend (Render):** https://muebleria-jota-api-5c7k.onrender.com/api/productos
+
+El backend usa el plan gratuito de Render: después de un rato sin uso, la primera
+petición puede demorar 50 segundos o más.
 
 ## Estructura del proyecto
 
