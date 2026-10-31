@@ -1,0 +1,14 @@
+# Blueprint de Render para la API. Los valores con sync: false se cargan en el panel.
+services:
+  - type: web
+    name: muebleria-jota-api
+    runtime: node
+    rootDir: backend
+    buildCommand: npm ci
+    startCommand: npm start
+    healthCheckPath: /
+    envVars:
+      - key: MONGO_URI
+        sync: false
+      - key: CORS_ORIGIN
+        sync: false
