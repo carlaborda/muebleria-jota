@@ -1,11 +1,15 @@
-import { formatearPrecio } from "../utils/formato";
+import { useNavigate } from "react-router-dom";
+import { formatearPrecio, imagenDe } from "../utils/formato";
 import "./ProductCard.css";
 
-function ProductCard({ producto, onVerDetalle, onAgregar }) {
+function ProductCard({ producto, onAgregar }) {
+  const navigate = useNavigate();
+  const verDetalle = () => navigate(`/productos/${producto.id}`);
+
   return (
     <article className="card">
-      <button className="card__imagen" onClick={() => onVerDetalle(producto.id)} aria-label={`Ver ${producto.nombre}`}>
-        <img src={producto.imagen} alt={producto.nombre} loading="lazy" />
+      <button className="card__imagen" onClick={verDetalle} aria-label={`Ver ${producto.nombre}`}>
+        <img src={imagenDe(producto)} alt={producto.nombre} loading="lazy" />
       </button>
 
       <div className="card__cuerpo">
@@ -13,7 +17,7 @@ function ProductCard({ producto, onVerDetalle, onAgregar }) {
         <p className="card__precio">{formatearPrecio(producto.precio)}</p>
 
         <div className="card__acciones">
-          <button className="boton boton--secundario" onClick={() => onVerDetalle(producto.id)}>
+          <button className="boton boton--secundario" onClick={verDetalle}>
             Ver detalle
           </button>
           <button className="boton boton--principal" onClick={() => onAgregar(producto)}>

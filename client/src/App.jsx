@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
-import { Routes, Route, useNavigate } from 'react-router-dom';
+import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import Navbar from "./componentes/Navbar";
 import Footer from "./componentes/Footer";
 import ProductDetail from "./pages/ProductDetail";
 import Carrito from "./componentes/Carrito";
+import EstadoCarga from "./componentes/EstadoCarga";
 import Inicio from "./pages/Inicio";
 import Catalogo from "./pages/Catalogo";
 import Contacto from "./pages/Contacto";
@@ -13,6 +14,7 @@ import { obtenerProductos } from "./servicios/api";
 function App() {
  
   const navigate = useNavigate();
+  const { pathname } = useLocation();
 
   // Catálogo traído del backend (GET /api/productos)
   const [productos, setProductos] = useState([]);
@@ -22,7 +24,10 @@ function App() {
   // Carrito: [{ producto, cantidad }]
   const [carrito, setCarrito] = useState(() => {
     const guardado = localStorage.getItem("carrito");
-    return guardado ? JSON.parse(guardado) : [];
+    // Los ítems viejos tienen id numérico del catálogo estático y ya no existen en la base
+    return guardado
+      ? JSON.parse(guardado).filter((item) => typeof item.producto.id === "string")
+      : [];
   });
 
 useEffect(() => {
@@ -49,14 +54,21 @@ useEffect(() => {
     return () => controlador.abort();
   }, [cargarProductos]);
 
-  function navegar(nuevaVista) {
-    setVista(nuevaVista);
+  useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [pathname]);
+
+  // Mantiene catálogo y carrito al día después de crear o editar un producto
+  function manejarGuardado(producto) {
+    cargarProductos();
+    setCarrito((actual) =>
+      actual.map((item) => (item.producto.id === producto.id ? { ...item, producto } : item))
+    );
   }
 
-  function verDetalle(id) {
-    setProductoSeleccionado(id);
-    navegar("detalle");
+  function manejarEliminado(id) {
+    cargarProductos();
+    quitarDelCarrito(id);
   }
 
   function agregarAlCarrito(producto, cantidad = 1) {
@@ -106,8 +118,10 @@ useEffect(() => {
 
           {/* Rutas dinámicas y de administración */}
 
-          <Route path="/productos/:id" element={<ProductDetail onAgregar={agregarAlCarrito} onVolver={() => navigate("/productos")} />} />
-          <Route path="/admin/crear-producto" element={<CrearProducto />} />
+          <Route path="/productos/:id" element={<ProductDetail onAgregar={agregarAlCarrito} onVolver={() => navigate("/productos")} onEliminado={manejarEliminado} />} />
+          <Route path="/admin/crear-producto" element={<CrearProducto onGuardado={manejarGuardado} />} />
+          <Route path="/admin/editar-producto/:id" element={<CrearProducto onGuardado={manejarGuardado} />} />
+          <Route path="*" element={<div className="contenedor seccion"><EstadoCarga tipo="vacio" mensaje="Página no encontrada." /></div>} />
         </Routes>
       </main>
 

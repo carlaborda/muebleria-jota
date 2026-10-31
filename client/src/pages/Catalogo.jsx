@@ -10,7 +10,7 @@ function Catalogo({ productos, cargando, error, onAgregar, onReintentar }) {
   const filtrados = (productos || []).filter(
     (p) =>
       p.nombre.toLowerCase().includes(termino) ||
-      p.descripcion.toLowerCase().includes(termino)
+      (p.descripcion || "").toLowerCase().includes(termino)
   );
 
   return (

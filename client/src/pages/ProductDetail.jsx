@@ -1,15 +1,20 @@
 import { useEffect, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import EstadoCarga from "../componentes/EstadoCarga";
-import { obtenerProducto } from "../servicios/api";
-import { formatearClave, formatearPrecio } from "../utils/formato";
+import { eliminarProducto, obtenerProducto } from "../servicios/api";
+import { formatearClave, formatearPrecio, imagenDe } from "../utils/formato";
 import "./ProductDetail.css";
 
-function ProductDetail({ productoId, onAgregar, onVolver }) {
+function ProductDetail({ onAgregar, onVolver, onEliminado }) {
+  const { id: productoId } = useParams();
+  const navigate = useNavigate();
   const [producto, setProducto] = useState(null);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState(null);
   const [cantidad, setCantidad] = useState(1);
   const [agregado, setAgregado] = useState(false);
+  const [eliminando, setEliminando] = useState(false);
+  const [errorEliminar, setErrorEliminar] = useState(null);
 
   // GET /api/productos/:id cada vez que cambia el producto seleccionado
   useEffect(() => {
@@ -43,6 +48,22 @@ function ProductDetail({ productoId, onAgregar, onVolver }) {
     setAgregado(true);
   }
 
+  async function manejarEliminar() {
+    if (!window.confirm(`¿Eliminar "${producto.nombre}"? Esta acción no se puede deshacer.`)) return;
+
+    setEliminando(true);
+    setErrorEliminar(null);
+
+    try {
+      await eliminarProducto(producto.id);
+      onEliminado(producto.id);
+      navigate("/productos");
+    } catch (err) {
+      setErrorEliminar(err.message);
+      setEliminando(false);
+    }
+  }
+
   if (cargando) {
     return (
       <div className="contenedor seccion">
@@ -70,13 +91,14 @@ function ProductDetail({ productoId, onAgregar, onVolver }) {
 
       <article className="detalle">
         <div className="detalle__imagen">
-          <img src={producto.imagen} alt={producto.nombre} />
+          <img src={imagenDe(producto)} alt={producto.nombre} />
         </div>
 
         <div className="detalle__info">
           <h1 className="detalle__nombre">{producto.nombre}</h1>
           <p className="detalle__precio">{formatearPrecio(producto.precio)}</p>
           <p className="detalle__descripcion">{producto.descripcion}</p>
+          <p className="detalle__stock">Stock disponible: {producto.stock ?? 0}</p>
 
           {producto.especificaciones && (
             <dl className="detalle__specs">
@@ -103,6 +125,17 @@ function ProductDetail({ productoId, onAgregar, onVolver }) {
           <p className={`detalle__aviso ${agregado ? "detalle__aviso--visible" : ""}`} role="status">
             {agregado && "✓ Agregado al carrito"}
           </p>
+
+          <div className="detalle__admin">
+            <Link to={`/admin/editar-producto/${producto.id}`} className="boton boton--secundario">
+              Editar
+            </Link>
+            <button className="boton boton--link" onClick={manejarEliminar} disabled={eliminando}>
+              {eliminando ? "Eliminando..." : "Eliminar"}
+            </button>
+          </div>
+
+          {errorEliminar && <EstadoCarga tipo="error" mensaje={errorEliminar} />}
         </div>
       </article>
     </div>

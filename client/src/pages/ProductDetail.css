@@ -79,6 +79,19 @@
   opacity: 1;
 }
 
+.detalle__stock {
+  color: var(--texto-suave);
+}
+
+.detalle__admin {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--linea);
+}
+
 @media (min-width: 800px) {
   .detalle {
     grid-template-columns: 1fr 1fr;
