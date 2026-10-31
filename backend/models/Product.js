@@ -25,9 +25,15 @@ const productoSchema = new mongoose.Schema({
   imagenUrl: {
     type: String,
     trim: true
+  },
+  // Ficha técnica del catálogo original (opcional, se carga con el seed)
+  especificaciones: {
+    type: Map,
+    of: String
   }
 }, {
-  timestamps: true  // Añade automáticamente 'createdAt' y 'updatedAt'
+  timestamps: true,  // Añade automáticamente 'createdAt' y 'updatedAt'
+  toJSON: { virtuals: true }  // Incluye 'id' en las respuestas, que es lo que usa el front
 });
 
 // Compilamos el esquema en un modelo llamado 'Producto'

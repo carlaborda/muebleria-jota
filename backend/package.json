@@ -4,9 +4,9 @@
   "description": "Sitio web de catálogo para una mueblería ficticia (\"Hermanos Jota\"). Es un\r sitio estático de HTML, CSS y JavaScript puro: sin frameworks, sin build\r step y sin backend.",
   "main": "app.js",
   "scripts": {
-    "start": "node --env-file=.env app.js",
-    "dev": "node --env-file=.env --watch app.js",
-    "seed": "node --env-file=.env seed.js",
+    "start": "node app.js",
+    "dev": "node --watch app.js",
+    "seed": "node seed.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -22,11 +22,15 @@
   },
   "homepage": "https://github.com/carlaborda/muebleria-jota#readme",
   "dependencies": {
+    "cors": "^2.8.6",
     "dotenv": "^18.0.9",
     "express": "^5.2.1",
     "mongoose": "^9.11.4"
   },
   "devDependencies": {
     "nodemon": "^3.1.14"
+  },
+  "engines": {
+    "node": ">=20.19"
   }
 }
