@@ -1,5 +1,5 @@
 import EstadoCarga from "./EstadoCarga";
-import { formatearPrecio } from "../utils/formato";
+import { formatearPrecio, imagenDe } from "../utils/formato";
 import "./Carrito.css";
 
 function Carrito({ items, onCambiarCantidad, onQuitar, onVaciar, onSeguirComprando }) {
@@ -21,7 +21,7 @@ function Carrito({ items, onCambiarCantidad, onQuitar, onVaciar, onSeguirCompran
           <ul className="carrito__lista">
             {items.map(({ producto, cantidad }) => (
               <li key={producto.id} className="carrito__item">
-                <img src={producto.imagen} alt="" />
+                <img src={imagenDe(producto)} alt="" />
                 <div className="carrito__info">
                   <h3>{producto.nombre}</h3>
                   <p>{formatearPrecio(producto.precio)} c/u</p>

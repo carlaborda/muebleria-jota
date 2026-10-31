@@ -23,7 +23,7 @@ function Navbar({ cantidadCarrito }) {
         </nav>
 
         <Link 
-          to="/"
+          to="/carrito"
           className="navbar__carrito"
           aria-label={`Ver carrito, ${cantidadCarrito} productos`}
         >
