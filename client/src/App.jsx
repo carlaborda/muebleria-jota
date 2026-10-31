@@ -115,6 +115,7 @@ useEffect(() => {
           <Route path="/" element={<Inicio {...estadoCatalogo} />} />
           <Route path="/contacto" element={<Contacto />} />
           <Route path="/productos" element={<Catalogo {...estadoCatalogo} />} />
+          <Route path="/carrito" element={<Carrito items={carrito} onCambiarCantidad={cambiarCantidad} onQuitar={quitarDelCarrito} onVaciar={() => setCarrito([])} onSeguirComprando={() => navigate("/productos")} />} />
 
           {/* Rutas dinámicas y de administración */}
 
