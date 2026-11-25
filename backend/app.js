@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const productosRouter = require('./routes/productos');
 const categoriasRouter = require('./routes/categorias');
+const usuariosRouter = require('./routes/usuarios.js')
 const logger = require('./mi-logger.js');
 
 const app = express();
@@ -39,6 +40,8 @@ app.get('/', (req, res) => {
 // Montaje del router modular
 app.use('/api/productos', productosRouter);
 app.use('/api/categorias', categoriasRouter);
+app.use('/api/usuarios', usuariosRouter)
+
 
 // Ruta de 404 y manejo de errores (ya lo teníamos de clases anteriores)
 app.use((req, res) => {
