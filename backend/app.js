@@ -3,6 +3,7 @@ require('dotenv').config();
 const mongoose = require('mongoose');
 const cors = require('cors');
 const productosRouter = require('./routes/productos');
+const categoriasRouter = require('./routes/categorias');
 const logger = require('./mi-logger.js');
 
 const app = express();
@@ -37,6 +38,7 @@ app.get('/', (req, res) => {
 
 // Montaje del router modular
 app.use('/api/productos', productosRouter);
+app.use('/api/categorias', categoriasRouter);
 
 // Ruta de 404 y manejo de errores (ya lo teníamos de clases anteriores)
 app.use((req, res) => {
@@ -66,6 +68,10 @@ app.use((err, req, res, next) => {
   // JSON mal formado en el cuerpo de la petición
   if (err.type === 'entity.parse.failed') {
     return res.status(400).json({ error: 'El cuerpo de la petición no es JSON válido' });
+  }
+
+  if (err.code === 11000) {
+    return res.status(409).json({ error: 'Recurso duplicado' });
   }
 
   console.error('[Error de servidor]:', err.stack);

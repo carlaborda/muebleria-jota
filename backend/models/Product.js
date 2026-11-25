@@ -26,6 +26,10 @@ const productoSchema = new mongoose.Schema({
     type: String,
     trim: true
   },
+  categoria: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Categoria'
+  },
   // Ficha técnica del catálogo original (opcional, se carga con el seed)
   especificaciones: {
     type: Map,
