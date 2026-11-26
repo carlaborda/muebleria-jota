@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext.jsx";
 
 import "../componentes/ContactForm.css";
 
@@ -24,8 +25,10 @@ function validar(datos) {
   return errores;
 }
 
-export default function LoginUsuario({ onLoginExitoso }) {
+export default function Login() {
+  const { login } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [formData, setFormData] = useState(DATOS_INICIALES);
   const [errores, setErrores] = useState({});
@@ -42,7 +45,7 @@ export default function LoginUsuario({ onLoginExitoso }) {
     }
   }
 
-  const handleSubmit = async (e) => {
+  async function handleSubmit(e) {
     e.preventDefault();
 
     const nuevosErrores = validar(formData);
@@ -52,46 +55,21 @@ export default function LoginUsuario({ onLoginExitoso }) {
     setEstado("enviando");
     setMensajeError("");
 
-    const payload = {
-      email: formData.email.trim().toLowerCase(),
-      password: formData.password
-    };
-
     try {
-      const response = await fetch("/api/usuarios/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
-      });
-
-      const data = await response.json().catch(() => ({}));
-      if (!response.ok) {
-        throw new Error(data.message || "Credenciales inválidas.");
-      }
-
-      console.log("Login exitoso, token:", data.token);
-
-      if (data.token) {
-        localStorage.setItem("token", data.token);
-      }
-
-      if (onLoginExitoso) {
-        onLoginExitoso(data);
-      }
-
+      await login(formData.email.trim().toLowerCase(), formData.password);
       setFormData(DATOS_INICIALES);
       setEstado("inicial");
-      navigate("/");
-    } catch (error) {
-      setMensajeError(error.message);
+      navigate(location.state?.desde || "/", { replace: true });
+    } catch (err) {
+      setErrores(err.detalles ?? {});
+      setMensajeError(err.message || "No se pudo iniciar sesión.");
       setEstado("error");
-      alert(`Error en el login: ${error.message}`);
     }
-  };
+  }
 
   return (
     <div className="contenedor">
-      <h2>Iniciar sesión</h2>
+      <h2>Ingresar</h2>
       <form className="form" onSubmit={handleSubmit} noValidate>
         <div className="form__campo">
           <label htmlFor="email">Correo electrónico *</label>
@@ -128,7 +106,7 @@ export default function LoginUsuario({ onLoginExitoso }) {
           type="submit"
           disabled={estado === "enviando"}
         >
-          {estado === "enviando" ? "Ingresando..." : "Iniciar sesión"}
+          {estado === "enviando" ? "Ingresando..." : "Ingresar"}
         </button>
 
         {estado === "error" && (

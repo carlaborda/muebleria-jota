@@ -53,3 +53,14 @@ export function actualizarProducto(id, datos) {
 export function eliminarProducto(id) {
   return pedir(`/productos/${id}`, { method: 'DELETE' });
 }
+
+
+// POST /api/usuarios/login 
+export function iniciarSesion(credenciales) {
+  return enviar('/usuarios/login', 'POST', credenciales);
+}
+
+// POST /api/usuarios/register 
+export function registrarUsuario(datosUsuario) {
+  return enviar('/usuarios/register', 'POST', datosUsuario);
+}

@@ -10,8 +10,9 @@ import Catalogo from "./pages/Catalogo";
 import Contacto from "./pages/Contacto";
 import CrearProducto from "./pages/CrearProducto";
 import { obtenerProductos } from "./servicios/api";
-import LoginUsuario from "./pages/LoginUsuario";
+import LoginUsuario from "./pages/Login";
 import RegistroUsuario from "./pages/RegistroUsuario";
+import Login from "./pages/Login";
 
 function App() {
  
@@ -115,7 +116,7 @@ useEffect(() => {
       <main className="app-main">
         <Routes>
           <Route path="/" element={<Inicio {...estadoCatalogo} />} />
-          <Route path="/login" element={<LoginUsuario />} />
+          <Route path="/login" element={<Login />} />
           <Route path="/register" element={<RegistroUsuario />} />
           <Route path="/contacto" element={<Contacto />} />
           <Route path="/productos" element={<Catalogo {...estadoCatalogo} />} />

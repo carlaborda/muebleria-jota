@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import "../componentes/ContactForm.css";
 
@@ -177,6 +177,10 @@ export default function RegistroUsuario({ onRegistrado }) {
           </p>
         )}
       </form>
+
+      <p>
+        ¿Ya tenés cuenta? <Link to="/login">Iniciá sesión acá</Link>
+      </p>
     </div>
   );
 }
