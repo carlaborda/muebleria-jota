@@ -1,16 +1,21 @@
 // Pruebas del contrato de Categorías. Se corren con el servidor prendido:
 //   npm run dev   (en una terminal)
 //   npm test      (en otra)
+// Las rutas de escritura piden rol admin: pasá el token de un admin en TOKEN_ADMIN
+// (el que devuelve POST /api/usuarios/login).
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
 
 const API = process.env.API_URL || 'http://localhost:3000/api';
+const TOKEN_ADMIN = process.env.TOKEN_ADMIN;
 const ID_QUE_NO_EXISTE = '6712f0a1c3e9a1b2c3d4e5f6';
 
-async function pedir(metodo, ruta, body) {
+async function pedir(metodo, ruta, body, { sinToken = false } = {}) {
+  const headers = { 'Content-Type': 'application/json' };
+  if (TOKEN_ADMIN && !sinToken) headers.Authorization = `Bearer ${TOKEN_ADMIN}`;
   const respuesta = await fetch(API + ruta, {
     method: metodo,
-    headers: { 'Content-Type': 'application/json' },
+    headers,
     body: body ? JSON.stringify(body) : undefined,
   });
   const datos = await respuesta.json();
@@ -22,6 +27,11 @@ test('GET /categorias → 200 con una lista de categorías', async () => {
   assert.equal(status, 200);
   assert.ok(Array.isArray(datos) && datos.length > 0, 'tiene que haber categorías (¿corriste el seed?)');
   assert.ok(datos[0]._id && datos[0].nombre, 'cada categoría tiene _id y nombre');
+});
+
+test('POST /categorias sin token → 401', async () => {
+  const { status } = await pedir('POST', '/categorias', { nombre: 'Sin permiso' }, { sinToken: true });
+  assert.equal(status, 401);
 });
 
 test('POST /categorias → 201; repetida → 409; sin nombre → 400', async () => {

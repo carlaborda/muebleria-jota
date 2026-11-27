@@ -1,5 +1,7 @@
 const express = require('express');
 const Categoria = require('../models/Categoria');
+const verifyToken = require('../middleware/authMiddleware');
+const verifyAdmin = require('../middleware/verifyAdmin');
 
 const router = express.Router();
 
@@ -8,7 +10,7 @@ router.get('/', async (req, res) => {
   res.json(categorias);
 });
 
-router.post('/', async (req, res) => {
+router.post('/', verifyToken, verifyAdmin, async (req, res) => {
   const categoria = await Categoria.create({ nombre: req.body.nombre });
   res.status(201).json(categoria);
 });
