@@ -3,6 +3,16 @@ import { iniciarSesion } from '../servicios/api.js'
 
 const AuthContext = createContext(null);
 
+// Lee el campo exp del payload del JWT (no verifica la firma: eso lo hace el backend)
+function tokenVencido(token) {
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/')));
+    return typeof payload.exp === 'number' && payload.exp * 1000 < Date.now();
+  } catch {
+    return true;
+  }
+}
+
 function leerSesionInicial() {
   try {
     const raw = localStorage.getItem('sesion');
@@ -10,7 +20,13 @@ function leerSesionInicial() {
       return null;
     }
     const parsed = JSON.parse(raw);
-    return parsed && typeof parsed === 'object' ? parsed : null;
+    if (!parsed || typeof parsed !== 'object') return null;
+    // El JWT dura 1h: si ya venció, descartamos la sesión guardada
+    if (tokenVencido(parsed.token)) {
+      localStorage.removeItem('sesion');
+      return null;
+    }
+    return parsed;
   } catch {
     localStorage.removeItem('sesion');
     return null;

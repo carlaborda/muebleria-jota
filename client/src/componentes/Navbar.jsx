@@ -1,11 +1,20 @@
 import "./Navbar.css";
-import { Link } from 'react-router-dom';
+import { startTransition } from "react";
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from "../context/AuthContext.jsx";
 
-
-
 function Navbar({ cantidadCarrito }) {
-  const { usuario, logout} = useAuth();
+  const { usuario, logout } = useAuth();
+  const navigate = useNavigate();
+
+  function cerrarSesion() {
+    // React Router aplica la navegación como transición: si limpiamos la sesión aparte,
+    // ProtectedRoute alcanza a redirigir a /login. Juntos van directo al inicio.
+    startTransition(() => {
+      navigate("/", { replace: true });
+      logout();
+    });
+  }
 
   return (
     <header className="navbar">
@@ -47,15 +56,20 @@ function Navbar({ cantidadCarrito }) {
             <button
               type="button"
               className="navbar__carrito secundario"
-              onClick={logout}
+              onClick={cerrarSesion}
             >
               Cerrar sesión
             </button>
           </div>
         ) : (
-          <Link to="/login" className="navbar__carrito">
-            Ingresar
-          </Link>
+          <div className="navbar__sesion">
+            <Link to="/login" className="navbar__enlace">
+              Login
+            </Link>
+            <Link to="/register" className="navbar__carrito secundario">
+              Registro
+            </Link>
+          </div>
         )}
       </div>
     </header>
