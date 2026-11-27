@@ -17,6 +17,11 @@ function leerSesionInicial() {
   }
 }
 
+export function obtenerToken() {
+  const sesion = leerSesionInicial();
+  return sesion?.token ?? null;
+}
+
 export function AuthProvider({ children }) {
   // La sesión es lo que devuelve el login: { token, usuario }. Sin sesión: null.
   const [sesion, setSesion] = useState(leerSesionInicial);
@@ -33,9 +38,9 @@ export function AuthProvider({ children }) {
     setSesion(null);
   }
 
-  const valor = {
-    usuario: sesion ? sesion.usuario : null,
-    token: sesion ? sesion.token : null,
+ const valor = {
+    usuario: sesion?.user ?? null,
+    token: sesion?.token ?? null,
     sesion,
     login,
     logout,

@@ -1,9 +1,11 @@
 import "./Navbar.css";
 import { Link } from 'react-router-dom';
+import { useAuth } from "../context/AuthContext.jsx";
 
 
 
 function Navbar({ cantidadCarrito }) {
+  const { usuario, logout} = useAuth();
 
   return (
     <header className="navbar">
@@ -17,12 +19,14 @@ function Navbar({ cantidadCarrito }) {
 
         <nav aria-label="Menú principal" className="navbar__enlaces">
           <Link to="/" className="navbar__enlace">Inicio</Link>
-          <Link to="/contacto" className="navbar__enlace">Sobre Nosotros</Link>
-          <Link to="/productos" className="navbar__enlace" >Productos</Link>
-          <Link to="/admin/crear-producto" className="navbar__enlace">Admin</Link>
+          <Link to="/contacto" className="navbar__enlace">Sobre Nosotros</Link>
+          <Link to="/productos" className="navbar__enlace">Productos</Link>
+          {usuario && usuario.rol === "admin" && (
+            <Link to="/admin/crear-producto" className="navbar__enlace">Admin</Link>
+          )}
         </nav>
 
-        <Link 
+        <Link
           to="/carrito"
           className="navbar__carrito"
           aria-label={`Ver carrito, ${cantidadCarrito} productos`}
@@ -34,6 +38,25 @@ function Navbar({ cantidadCarrito }) {
           <span className="navbar__carrito-texto">Carrito</span>
           <span className="navbar__contador">{cantidadCarrito}</span>
         </Link>
+
+        {usuario ? (
+          <div className="navbar__sesion">
+            <span className="navbar__usuario">
+              Hola, {usuario.username}
+            </span>
+            <button
+              type="button"
+              className="navbar__carrito secundario"
+              onClick={logout}
+            >
+              Cerrar sesión
+            </button>
+          </div>
+        ) : (
+          <Link to="/login" className="navbar__carrito">
+            Ingresar
+          </Link>
+        )}
       </div>
     </header>
   );
