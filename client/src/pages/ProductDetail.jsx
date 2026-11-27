@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import EstadoCarga from "../componentes/EstadoCarga";
+import { useAuth } from "../context/AuthContext"; // ajustá la ruta si tu carpeta se llama distinto
 import { eliminarProducto, obtenerProducto } from "../servicios/api";
 import { formatearClave, formatearPrecio, imagenDe } from "../utils/formato";
 import "./ProductDetail.css";
@@ -8,6 +9,9 @@ import "./ProductDetail.css";
 function ProductDetail({ onAgregar, onVolver, onEliminado }) {
   const { id: productoId } = useParams();
   const navigate = useNavigate();
+  const { usuario } = useAuth();
+  const esAdmin = usuario?.rol === "admin";
+
   const [producto, setProducto] = useState(null);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState(null);
@@ -49,6 +53,11 @@ function ProductDetail({ onAgregar, onVolver, onEliminado }) {
   }
 
   async function manejarEliminar() {
+    if (!esAdmin) {
+      setErrorEliminar("Solo los administradores pueden eliminar productos.");
+      return;
+    }
+
     if (!window.confirm(`¿Eliminar "${producto.nombre}"? Esta acción no se puede deshacer.`)) return;
 
     setEliminando(true);
@@ -126,14 +135,16 @@ function ProductDetail({ onAgregar, onVolver, onEliminado }) {
             {agregado && "✓ Agregado al carrito"}
           </p>
 
-          <div className="detalle__admin">
-            <Link to={`/admin/editar-producto/${producto.id}`} className="boton boton--secundario">
-              Editar
-            </Link>
-            <button className="boton boton--link" onClick={manejarEliminar} disabled={eliminando}>
-              {eliminando ? "Eliminando..." : "Eliminar"}
-            </button>
-          </div>
+          {esAdmin && (
+            <div className="detalle__admin">
+              <Link to={`/admin/editar-producto/${producto.id}`} className="boton boton--secundario">
+                Editar
+              </Link>
+              <button className="boton boton--link" onClick={manejarEliminar} disabled={eliminando}>
+                {eliminando ? "Eliminando..." : "Eliminar"}
+              </button>
+            </div>
+          )}
 
           {errorEliminar && <EstadoCarga tipo="error" mensaje={errorEliminar} />}
         </div>

@@ -13,6 +13,7 @@ import { obtenerProductos } from "./servicios/api";
 import LoginUsuario from "./pages/Login";
 import RegistroUsuario from "./pages/RegistroUsuario";
 import Login from "./pages/Login";
+import ProtectedRoute from "./componentes/ProtectedRoute";
 
 function App() {
  
@@ -125,9 +126,13 @@ useEffect(() => {
           {/* Rutas dinámicas y de administración */}
 
           <Route path="/productos/:id" element={<ProductDetail onAgregar={agregarAlCarrito} onVolver={() => navigate("/productos")} onEliminado={manejarEliminado} />} />
-          <Route path="/admin/crear-producto" element={<CrearProducto onGuardado={manejarGuardado} />} />
-          <Route path="/admin/editar-producto/:id" element={<CrearProducto onGuardado={manejarGuardado} />} />
-          <Route path="*" element={<div className="contenedor seccion"><EstadoCarga tipo="vacio" mensaje="Página no encontrada." /></div>} />
+
+          {/* Rutas protegidas*/}
+         <Route path="/admin/crear-producto" element={<ProtectedRoute soloAdmin> <CrearProducto onGuardado={manejarGuardado} /> </ProtectedRoute>}/>
+         <Route path="/admin/editar-producto/:id" element={<ProtectedRoute soloAdmin> <CrearProducto onGuardado={manejarGuardado} /> </ProtectedRoute>}/>
+
+
+         <Route path="*" element={<div className="contenedor seccion"><EstadoCarga tipo="vacio" mensaje="Página no encontrada." /></div>} />
         </Routes>
       </main>
 
