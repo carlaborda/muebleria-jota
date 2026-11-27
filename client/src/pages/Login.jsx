@@ -30,6 +30,7 @@ export default function Login() {
   const navigate = useNavigate();
   const location = useLocation();
 
+
   const [formData, setFormData] = useState(DATOS_INICIALES);
   const [errores, setErrores] = useState({});
   // Estados: "inicial" | "enviando" | "error"
@@ -59,7 +60,7 @@ export default function Login() {
       await login(formData.email.trim().toLowerCase(), formData.password);
       setFormData(DATOS_INICIALES);
       setEstado("inicial");
-      navigate(location.state?.desde || "/", { replace: true });
+      navigate(location.state?.desde || location.state?.from || "/", { replace: true });
     } catch (err) {
       setErrores(err.detalles ?? {});
       setMensajeError(err.message || "No se pudo iniciar sesión.");

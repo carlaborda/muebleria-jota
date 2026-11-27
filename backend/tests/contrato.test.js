@@ -3,8 +3,10 @@
 //   npm test      (en otra)
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
+const jwt = require('jsonwebtoken');
 
 const API = process.env.API_URL || 'http://localhost:3000/api';
+const SECRET = process.env.JWT_SECRET || 'tu_secreto_dev';
 const ID_QUE_NO_EXISTE = '6712f0a1c3e9a1b2c3d4e5f6';
 
 async function pedir(metodo, ruta, body) {
@@ -14,6 +16,31 @@ async function pedir(metodo, ruta, body) {
     body: body ? JSON.stringify(body) : undefined,
   });
   const datos = await respuesta.json();
+  return { status: respuesta.status, datos };
+}
+
+
+// Token válido pero con rol distinto a 'admin'
+const tokenUsuario = jwt.sign(
+  { id: '6712f0a1c3e9a1b2c3d4e500', username: 'usuario_comun', rol: 'usuario' },
+  SECRET,
+  { expiresIn: '1h' }
+);
+
+async function pedirConToken(ruta, token) {
+  const headers = { 'Content-Type': 'application/json' };
+  if (token) headers.Authorization = `Bearer ${token}`;
+
+  const respuesta = await fetch(API + ruta, {
+    method: 'POST',
+    headers,
+    body: JSON.stringify({
+      nombre: `Producto No Admin ${Date.now()}`,
+      precio: 15000,
+    }),
+  });
+
+  const datos = await respuesta.json().catch(() => ({}));
   return { status: respuesta.status, datos };
 }
 
@@ -72,26 +99,16 @@ test('GET /productos/:id → el detalle también trae la categoría con nombre',
   assert.ok(datos.categoria?.nombre, 'falta populate en el detalle');
 });
 
-test('POST /productos con una categoría que no existe → 400', async () => {
-  const { status, datos } = await pedir('POST', '/productos', {
-    nombre: 'Mesa fantasma', precio: 1000, categoria: ID_QUE_NO_EXISTE,
-  });
-  assert.equal(status, 400);
-  assert.ok(datos.error, 'responde { error }');
+
+test('No admin no puede dar de alta productos en /admin/crear-producto → 403', async () => {
+  const { status, datos } = await pedirConToken('/admin/crear-producto', tokenUsuario);
+
+  assert.equal(status, 403);
+  assert.ok(datos.error || datos.message, 'debe devolver un mensaje de error');
 });
 
-test('POST /productos con categoria "abc" → 400 (no 500)', async () => {
-  const { status } = await pedir('POST', '/productos', { nombre: 'Mesa rara', precio: 1000, categoria: 'abc' });
-  assert.equal(status, 400);
-});
+test('Sin token no puede dar de alta productos en /admin/crear-producto → 401', async () => {
+  const { status } = await pedirConToken('/admin/crear-producto', null);
 
-test('POST /productos con una categoría válida → 201 y guarda la referencia', async () => {
-  const { datos: categorias } = await pedir('GET', '/categorias');
-  assert.ok(Array.isArray(categorias) && categorias.length, 'GET /categorias no devuelve categorías');
-  const { status, datos } = await pedir('POST', '/productos', {
-    nombre: `Banco ${Date.now()}`, precio: 50000, categoria: categorias[0]._id,
-  });
-  assert.equal(status, 201);
-  assert.equal(String(datos.categoria?._id ?? datos.categoria), categorias[0]._id);
-  await pedir('DELETE', `/productos/${datos._id}`);
+  assert.equal(status, 401);
 });

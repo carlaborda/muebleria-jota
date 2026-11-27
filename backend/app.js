@@ -5,6 +5,7 @@ const cors = require('cors');
 const productosRouter = require('./routes/productos');
 const categoriasRouter = require('./routes/categorias');
 const usuariosRouter = require('./routes/usuarios.js')
+const pedidosRouter = require('./routes/pedidos.js')
 const logger = require('./mi-logger.js');
 
 const app = express();
@@ -41,6 +42,7 @@ app.get('/', (req, res) => {
 app.use('/api/productos', productosRouter);
 app.use('/api/categorias', categoriasRouter);
 app.use('/api/usuarios', usuariosRouter)
+app.use('/api/pedidos', pedidosRouter)
 
 
 // Ruta de 404 y manejo de errores (ya lo teníamos de clases anteriores)

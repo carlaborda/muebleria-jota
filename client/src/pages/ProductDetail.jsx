@@ -1,15 +1,17 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import EstadoCarga from "../componentes/EstadoCarga";
-import { useAuth } from "../context/AuthContext"; // ajustá la ruta si tu carpeta se llama distinto
+import { useAuth } from "../context/AuthContext"; 
 import { eliminarProducto, obtenerProducto } from "../servicios/api";
 import { formatearClave, formatearPrecio, imagenDe } from "../utils/formato";
 import "./ProductDetail.css";
+import { useCart } from "../context/CartContext";
 
-function ProductDetail({ onAgregar, onVolver, onEliminado }) {
+function ProductDetail({ onVolver, onEliminado }) {
   const { id: productoId } = useParams();
   const navigate = useNavigate();
   const { usuario } = useAuth();
+  const { agregar } = useCart();
   const esAdmin = usuario?.rol === "admin";
 
   const [producto, setProducto] = useState(null);
@@ -48,7 +50,7 @@ function ProductDetail({ onAgregar, onVolver, onEliminado }) {
   }, [agregado]);
 
   function manejarAgregar() {
-    onAgregar(producto, cantidad);
+    agregar(producto, cantidad);
     setAgregado(true);
   }
 

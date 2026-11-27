@@ -1,39 +1,51 @@
 # Mueblería Hermanos Jota
 
-Tienda online para una mueblería ficticia ("Hermanos Jota"). Aplicación de una
-sola página (SPA) en **React + Vite** que consume una **API REST en Node.js +
-Express** con persistencia en **MongoDB**.
+Aplicación web de una tienda de muebles ficticia. Está formada por:
 
-## Integrantes — Grupo 4
+- un frontend SPA construido con React, React Router y Vite;
+- una API REST construida con Node.js, Express y Mongoose;
+- MongoDB como base de datos.
 
-| Integrante |
-| :--------: |
-| Almada Alejo Matías |
-| Luciano Losardo |
-| Sebastian Paz Friaz |
-| Marcos Ezequiel Diaz |
-| Borda Carla |
+## Integrantes
+
+- Almada Alejo Matías
+- Luciano Losardo
+- Sebastian Paz Friaz
+- Marcos Ezequiel Diaz
+- Borda Carla
 
 ## Arquitectura
 
-```
-Navegador (React)  ──HTTP/JSON──▶  API Express  ──Mongoose──▶  MongoDB
-     /client                        /backend
+```text
+Navegador
+  -> React Router administra las vistas
+  -> Contextos mantienen sesión y carrito
+  -> servicios/api.js o fetch realiza las llamadas HTTP
+  -> API Express bajo /api
+  -> MongoDB mediante Mongoose
 ```
 
-En desarrollo el front llama a `/api` y Vite lo redirige al backend. En
-producción el front usa `VITE_API_URL` y el backend habilita ese origen con
-`CORS_ORIGIN`.
+En desarrollo, Vite recibe las rutas `/api` y las reenvía a
+`http://localhost:3000`. En producción se usa `VITE_API_URL` en las llamadas
+centralizadas del frontend.
 
 ## Tecnologías
 
-- **Frontend:** React 19, React Router DOM 7, Vite 8, oxlint.
-- **Backend:** Node.js, Express 5, Mongoose 9, cors, dotenv.
-- **Base de datos:** MongoDB (Atlas o local).
+- Frontend: React 19, React Router DOM 7, Vite 8.
+- Backend: Node.js, Express 5, Mongoose 9.
+- Seguridad: bcrypt para contraseñas y JWT para autenticación.
+- Base de datos: MongoDB local o MongoDB Atlas.
+
+## Requisitos
+
+- Node.js 20.19 o superior.
+- npm.
+- Una instancia de MongoDB.
+- Las variables `MONGO_URI` y `JWT_SECRET` en el backend.
 
 ## Instalación
 
-Requiere Node.js 20.19 o superior y una base MongoDB.
+Instalar las dependencias en las dos aplicaciones:
 
 ```bash
 cd backend
@@ -47,140 +59,350 @@ npm install
 
 ## Variables de entorno
 
-Los archivos `.env` no se suben al repositorio. Cada carpeta tiene un
-`.env.example` para copiar.
+### Backend: `backend/.env`
 
-**`backend/.env`**
+| Variable | Obligatoria | Uso |
+|---|---:|---|
+| `MONGO_URI` | Sí | Conexión a MongoDB. La API no inicia sin ella. |
+| `JWT_SECRET` | Sí | Firma y verifica los tokens JWT. |
+| `PORT` | No | Puerto HTTP. Predeterminado: `3000`. |
+| `CORS_ORIGIN` | Producción | Orígenes separados por coma permitidos por CORS. |
 
-| Variable      | Obligatoria | Descripción |
-|---------------|-------------|-------------|
-| `MONGO_URI`   | Sí          | Cadena de conexión a MongoDB. Sin ella la API no arranca. |
-| `PORT`        | No          | Puerto de la API (por defecto `3000`). |
-| `CORS_ORIGIN` | En producción | Orígenes del front habilitados, separados por coma. |
+Ejemplo local:
 
-**`client/.env`**
+```env
+MONGO_URI=mongodb://127.0.0.1:27017/muebleria-jota
+JWT_SECRET=una_clave_larga_y_secreta
+PORT=3000
+```
 
-| Variable       | Obligatoria   | Descripción |
-|----------------|---------------|-------------|
-| `VITE_API_URL` | En producción | URL pública del backend, sin barra final. |
+Ejemplo para Atlas:
 
-### Configurar MongoDB Atlas
+```text
+mongodb+srv://usuario:password@cluster.mongodb.net/muebleria-jota
+```
 
-1. Crear un cluster y un usuario de base de datos.
-2. En **Network Access**, permitir la IP de tu máquina. Render usa IP dinámicas
-   en el plan gratuito, por lo que hay que habilitar `0.0.0.0/0`.
-3. Copiar la cadena de conexión en `MONGO_URI`, agregando el nombre de la base:
-   `mongodb+srv://<usuario>:<password>@<cluster>.mongodb.net/muebleria-jota`.
+### Frontend: `client/.env`
+
+| Variable | Uso |
+|---|---|
+| `VITE_API_URL` | URL pública del backend, sin barra final. En desarrollo puede quedar vacía. |
+
+```env
+VITE_API_URL=
+```
 
 ## Ejecución local
 
-Se levantan dos procesos, cada uno en su terminal:
+Levantar MongoDB y abrir dos terminales:
 
 ```bash
 cd backend
-npm run seed       # opcional: carga el catálogo inicial
-npm run dev        # API en http://localhost:3000
+npm run seed
+npm run dev
 ```
+
+El backend queda disponible en `http://localhost:3000`.
 
 ```bash
 cd client
-npm run dev        # Front en http://localhost:5173
+npm run dev
 ```
 
-`npm run seed` se puede repetir: solo inserta los productos que todavía no
-existen, comparando por nombre, y no modifica ni borra los demás.
+Vite normalmente queda disponible en `http://localhost:5173`.
 
-## API
+`npm run seed` crea las categorías y carga los productos iniciales sin eliminar
+datos existentes. Las categorías se crean por nombre y los productos se insertan
+solo si todavía no existe uno con el mismo nombre.
 
-| Método | Ruta                 | Funcionalidad       | Éxito |
-|--------|----------------------|---------------------|-------|
-| GET    | `/api/productos`     | Listar productos    | `200` |
-| GET    | `/api/productos/:id` | Obtener un producto | `200` |
-| POST   | `/api/productos`     | Crear un producto   | `201` |
-| PUT    | `/api/productos/:id` | Actualizar producto | `200` |
-| DELETE | `/api/productos/:id` | Eliminar producto   | `200` |
+## API REST
 
-Campos de un producto:
+Todas las rutas se encuentran bajo `/api`.
 
-| Campo              | Tipo   | Notas |
-|--------------------|--------|-------|
-| `nombre`           | String | Obligatorio. |
-| `precio`           | Number | Obligatorio, no negativo. |
-| `descripcion`      | String | |
-| `stock`            | Number | No negativo, por defecto `0`. |
-| `imagenUrl`        | String | |
-| `especificaciones` | Map    | Ficha técnica opcional, cargada por el seed. |
+### Productos
 
-Los errores responden `{ error }`:
+El esquema de producto contiene:
 
-| Código | Caso |
-|--------|------|
-| `400`  | ID con formato inválido, JSON mal formado o datos inválidos (incluye `detalles` por campo). |
-| `404`  | Producto o endpoint inexistente. |
-| `503`  | Base de datos no disponible. |
-| `500`  | Error interno. |
+| Campo | Tipo | Obligatorio |
+|---|---|---|
+| `nombre` | String | Sí |
+| `descripcion` | String | No |
+| `precio` | Number, mayor o igual a 0 | Sí |
+| `stock` | Number, mayor o igual a 0 | No; predeterminado `0` |
+| `imagenUrl` | String | No |
+| `categoria` | ObjectId de `Categoria` | No |
+| `especificaciones` | Map de claves y valores String | No |
 
-## Rutas del front
+| Método | Ruta | Protección | Descripción | Respuesta |
+|---|---|---|---|---|
+| `GET` | `/api/productos` | Pública | Lista todos los productos. `?categoria=<id>` filtra por categoría. La categoría devuelta incluye su nombre. | `200` |
+| `GET` | `/api/productos/:id` | Pública | Devuelve un producto por ID, con categoría poblada. | `200`; `400` ID inválido; `404` no existe |
+| `POST` | `/api/productos` | JWT + rol `admin` | Crea un producto. Valida que la categoría exista. | `201`; `400` datos o categoría inválidos |
+| `PUT` | `/api/productos/:id` | JWT + rol `admin` | Reemplaza los campos incluidos y ejecuta las validaciones del esquema. | `200`; `400`; `404` |
+| `DELETE` | `/api/productos/:id` | JWT + rol `admin` | Elimina un producto y devuelve el eliminado. | `200`; `400`; `404` |
 
-| Ruta                         | Página |
-|------------------------------|--------|
-| `/`                          | Inicio con productos destacados |
-| `/productos`                 | Catálogo con buscador |
-| `/productos/:id`             | Detalle, con acciones de editar y eliminar |
-| `/carrito`                   | Carrito, guardado en `localStorage` |
-| `/contacto`                  | Formulario de contacto (Formspree) |
-| `/admin/crear-producto`      | Alta de producto |
-| `/admin/editar-producto/:id` | Edición de producto |
+Ejemplo de creación:
 
-Las rutas de administración no tienen autenticación.
+```json
+{
+  "nombre": "Silla de Roble",
+  "descripcion": "Silla fabricada con madera maciza.",
+  "precio": 15000,
+  "stock": 10,
+  "imagenUrl": "https://ejemplo.com/silla.jpg",
+  "categoria": "6712f0a1c3e9a1b2c3d4e5f6"
+}
+```
+
+Las respuestas públicas usan `id` como virtual de Mongoose y permiten que el
+frontend navegue con rutas como `/productos/:id`.
+
+### Categorías
+
+| Método | Ruta | Protección | Descripción | Respuesta |
+|---|---|---|---|---|
+| `GET` | `/api/categorias` | Pública | Lista las categorías ordenadas alfabéticamente. | `200` |
+| `POST` | `/api/categorias` | Pública en la implementación actual | Crea una categoría. `nombre` es requerido y único. | `201`; `400`; `409` |
+
+### Usuarios
+
+| Método | Ruta | Protección | Descripción | Respuesta |
+|---|---|---|---|---|
+| `POST` | `/api/usuarios/register` | Pública | Registra un usuario. Recibe `username`, `email` y `password`. | `201`; `400`; `500` |
+| `POST` | `/api/usuarios/login` | Pública | Valida credenciales y genera un JWT con duración de una hora. | `200`; `401`; `500` |
+
+El cuerpo de login es:
+
+```json
+{
+  "email": "usuario@correo.com",
+  "password": "clave-secreta"
+}
+```
+
+La respuesta incluye:
+
+```json
+{
+  "token": "<jwt>",
+  "user": {
+    "id": "<id>",
+    "username": "<usuario>",
+    "mail": "<email>",
+    "rol": "usuario"
+  }
+}
+```
+
+El rol predeterminado es `usuario`. El modelo admite también `admin`. Las
+contraseñas se almacenan hasheadas con bcrypt y no se devuelven en el registro.
+
+### Pedidos
+
+| Método | Ruta | Protección | Descripción | Respuesta |
+|---|---|---|---|---|
+| `POST` | `/api/pedidos` | JWT | Recibe los items del carrito y crea una respuesta simulada. No persiste el pedido en MongoDB. | `201`; `400`; `401`; `403` |
+
+Ejemplo de cuerpo:
+
+```json
+{
+  "items": [
+    {
+      "id": "<id-producto>",
+      "nombre": "Silla de Roble",
+      "precio": 15000,
+      "cantidad": 2
+    }
+  ]
+}
+```
+
+La API calcula el total con `precio * cantidad`, identifica al usuario desde el
+JWT y devuelve un pedido con ID temporal.
+
+### Encabezados protegidos
+
+Las rutas protegidas esperan:
+
+```http
+Authorization: Bearer <jwt>
+Content-Type: application/json
+```
+
+Los errores suelen devolver:
+
+```json
+{ "error": "Mensaje de error" }
+```
+
+Autenticación y registro pueden usar `message` en lugar de `error`. El frontend
+normaliza ambos campos en sus servicios de API.
+
+## Lógica del frontend
+
+### Punto de entrada y proveedores
+
+`main.jsx` monta la aplicación dentro de:
+
+1. `BrowserRouter`, que interpreta las rutas del navegador.
+2. `AuthProvider`, que administra la sesión.
+3. `CartProvider`, que administra el carrito.
+4. `App`, que carga el catálogo y renderiza las páginas.
+
+### Rutas
+
+| Ruta | Componente | Acceso |
+|---|---|---|
+| `/` | Inicio | Público |
+| `/productos` | Catálogo y buscador | Público |
+| `/productos/:id` | Detalle del producto | Público |
+| `/carrito` | Carrito y simulación de compra | Público; compra requiere login |
+| `/contacto` | Información de contacto | Público |
+| `/login` | Inicio de sesión | Público |
+| `/register` | Registro | Público |
+| `/admin/crear-producto` | Alta de producto | JWT y rol `admin` |
+| `/admin/editar-producto/:id` | Edición de producto | JWT y rol `admin` |
+| `*` | Estado de página no encontrada | Público |
+
+`ProtectedRoute` redirige usuarios no autenticados a `/login` y conserva la ruta
+original en el estado de navegación. Si el usuario está autenticado pero no es
+administrador, muestra un mensaje de acceso denegado.
+
+### Sesión
+
+`AuthContext` guarda en `localStorage` la sesión completa que devuelve el login:
+
+```text
+localStorage["sesion"] = { token, user }
+```
+
+El token se lee al realizar peticiones y se agrega automáticamente como header
+`Authorization: Bearer <token>`. Cerrar sesión elimina esa clave y limpia el
+usuario del contexto.
+
+La protección de las rutas se basa en los datos del usuario conservados en el
+contexto. La protección definitiva es la del backend mediante JWT y rol
+administrador.
+
+### Catálogo
+
+Al iniciar `App`, se ejecuta `GET /api/productos`. El resultado se comparte con
+Inicio y Catálogo mediante props.
+
+- Inicio muestra los primeros cuatro productos como destacados.
+- Catálogo filtra localmente por coincidencia en nombre o descripción.
+- Los estados de carga, error y reintento se muestran con `EstadoCarga`.
+- Un `AbortController` cancela las solicitudes activas al desmontar el
+  componente o cambiar el recurso seleccionado.
+
+### Detalle y administración
+
+La página de detalle ejecuta `GET /api/productos/:id` y permite:
+
+- elegir una cantidad;
+- agregar el producto al carrito;
+- volver al catálogo;
+- editar o eliminar cuando el usuario tiene rol `admin`.
+
+El formulario compartido de creación y edición valida nombre, precio y stock en
+el navegador. En edición precarga el producto mediante `GET /api/productos/:id`.
+Después usa `POST /api/productos` o `PUT /api/productos/:id`.
+
+Los errores enviados por el backend se muestran dentro del formulario.
+
+### Carrito
+
+`CartContext` almacena el carrito en `localStorage`:
+
+```text
+localStorage["carrito"] = [{ producto, cantidad }]
+```
+
+El contexto ofrece:
+
+- agregar una unidad o una cantidad elegida;
+- sumar cantidades si el producto ya existe;
+- incrementar o disminuir la cantidad;
+- quitar un producto;
+- vaciar el carrito;
+- calcular la cantidad total y el importe;
+- reemplazar el producto almacenado después de una actualización.
+
+Al finalizar la compra:
+
+1. si no hay sesión, se redirige a login;
+2. se confirma que haya al menos un producto;
+3. se envía `POST /api/pedidos` con el token;
+4. ante éxito se vacía el carrito y se muestra la referencia devuelta;
+5. ante error se conserva el carrito y se muestra el mensaje.
+
+La compra actual es una simulación: el backend no persiste ni valida contra stock
+los pedidos, aunque sí exige un usuario autenticado y un array de items no vacío.
+
+### Comunicación con la API
+
+El frontend calcula la URL base como:
+
+```text
+VITE_API_URL || http://localhost:3000
+```
+
+`servicios/api.js` centraliza productos y autenticación. Agrega el token de
+sesión, serializa cuerpos JSON y transforma errores HTTP en objetos `Error`
+con `status` y `detalles`.
+
+El carrito usa directamente `fetch` para `/pedidos`, y el registro usa
+directamente `/api/usuarios/register`; ambas rutas pasan por el proxy de Vite
+durante el desarrollo.
+
+## Pruebas del contrato
+
+La suite necesita que el backend esté ejecutándose y que MongoDB tenga categorías
+cargadas:
+
+```bash
+cd backend
+npm run seed
+npm run dev
+```
+
+En otra terminal:
+
+```bash
+cd backend
+npm test
+```
+
+Las pruebas verifican categorías, filtros de productos, detalle poblado y acceso
+de administrador. `JWT_SECRET` en las pruebas debe coincidir con el del
+servidor.
 
 ## Despliegue
 
-Desplegar primero el backend, porque el front necesita su URL.
-
 ### Backend en Render
 
-1. Crear el servicio desde el Blueprint `render.yaml` o como **Web Service** con
-   Root Directory `backend`, Build Command `npm ci` y Start Command `npm start`.
-2. Cargar `MONGO_URI` y `CORS_ORIGIN` con la URL del front.
-3. Para cargar el catálogo, correr `npm run seed` una vez desde tu máquina con
-   la `MONGO_URI` de producción.
+`render.yaml` configura un Web Service de Node con:
 
-### Frontend en Vercel o Netlify
+- Root Directory: `backend`
+- Build: `npm ci`
+- Start: `npm start`
+- Health check: `/`
 
-Crear el proyecto con Root Directory (o Base directory) `client`, comando
-`npm run build` y carpeta de salida `dist`. Definir `VITE_API_URL` con la URL de
-Render **antes** de compilar, porque Vite la incorpora en el build.
+Cargar `MONGO_URI`, `JWT_SECRET` y `CORS_ORIGIN` en el panel de Render. La
+variable `CORS_ORIGIN` debe contener la URL exacta del frontend.
 
-`client/vercel.json` y `client/public/_redirects` hacen que las rutas del front
-funcionen al recargar la página en Vercel y Netlify respectivamente.
+Después del primer despliegue se puede ejecutar `npm run seed` localmente usando
+la cadena de producción o desde un entorno autorizado.
 
-### URLs de producción
+### Frontend
 
-Todavía no hay despliegues publicados.
+Para Vercel o Netlify:
 
-## Estructura del proyecto
+- Root/Base directory: `client`
+- Comando: `npm run build`
+- Directorio de salida: `dist`
+- Variable: `VITE_API_URL=<url pública del backend>`
 
-```
-.
-├── render.yaml                # Blueprint de Render
-├── backend/
-│   ├── app.js                 # Express, conexión a MongoDB y manejo de errores
-│   ├── mi-logger.js           # middleware que loguea método y ruta
-│   ├── models/Product.js      # esquema y modelo de Mongoose
-│   ├── routes/productos.js    # CRUD de /api/productos
-│   ├── seed.js                # carga del catálogo inicial
-│   └── data/catalogo.js       # datos usados por el seed
-└── client/
-    ├── public/                # logo, imágenes y redirecciones de Netlify
-    ├── vercel.json            # redirecciones de Vercel
-    └── src/
-        ├── App.jsx            # rutas, catálogo y carrito
-        ├── servicios/api.js   # peticiones a la API
-        ├── utils/formato.js   # formato de precios e imagen por defecto
-        ├── styles/base.css    # variables, reset, botones y layout compartido
-        ├── componentes/       # Navbar, Footer, ProductList, ProductCard,
-        │                      # ContactForm, Carrito, EstadoCarga
-        └── pages/             # Inicio, Catalogo, ProductDetail, Contacto,
-                               # CrearProducto (alta y edición)
-```
+`client/vercel.json` y `client/public/_redirects` mantienen activas las rutas de
+React Router al recargar la página.

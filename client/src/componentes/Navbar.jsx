@@ -1,11 +1,11 @@
 import "./Navbar.css";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext.jsx";
+import { useCart } from "../context/CartContext.jsx";
 
-
-
-function Navbar({ cantidadCarrito }) {
-  const { usuario, logout} = useAuth();
+function Navbar() {
+  const { usuario, logout } = useAuth();
+  const { cantidadTotal } = useCart();
 
   return (
     <header className="navbar">
@@ -29,14 +29,14 @@ function Navbar({ cantidadCarrito }) {
         <Link
           to="/carrito"
           className="navbar__carrito"
-          aria-label={`Ver carrito, ${cantidadCarrito} productos`}
+          aria-label={`Ver carrito, ${cantidadTotal} productos`}
         >
           <svg viewBox="0 0 24 24" aria-hidden="true">
             <path d="M6 7h12l-1 13H7L6 7Z" />
             <path d="M9 7a3 3 0 0 1 6 0" />
           </svg>
           <span className="navbar__carrito-texto">Carrito</span>
-          <span className="navbar__contador">{cantidadCarrito}</span>
+          <span className="navbar__contador">{cantidadTotal}</span>
         </Link>
 
         {usuario ? (

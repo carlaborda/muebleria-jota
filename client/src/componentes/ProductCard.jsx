@@ -1,8 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import { formatearPrecio, imagenDe } from "../utils/formato";
 import "./ProductCard.css";
+import { useCart } from "../context/CartContext";
 
-function ProductCard({ producto, onAgregar }) {
+function ProductCard({ producto }) {
+  const { agregar } = useCart();
   const navigate = useNavigate();
   const verDetalle = () => navigate(`/productos/${producto.id}`);
 
@@ -20,7 +22,7 @@ function ProductCard({ producto, onAgregar }) {
           <button className="boton boton--secundario" onClick={verDetalle}>
             Ver detalle
           </button>
-          <button className="boton boton--principal" onClick={() => onAgregar(producto)}>
+          <button className="boton boton--principal" onClick={() => agregar(producto)}>
             Agregar
           </button>
         </div>
